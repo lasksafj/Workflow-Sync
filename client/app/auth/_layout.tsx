@@ -2,6 +2,7 @@ import { Tabs } from 'expo-router';
 import React from 'react';
 
 import { TabBarIcon } from '@/components/navigation/TabBarIcon';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { Colors } from '@/constants/Colors';
 
 export default function TabLayout() {
@@ -22,6 +23,15 @@ export default function TabLayout() {
                     ),
                 }}
             />
+            <Tabs.Screen
+                name="notification"
+                options={{
+                    title: 'Notifications',
+                    tabBarIcon: ({ color, size }) => (
+                        <MaterialCommunityIcons name="bell" color={color} size={size} />
+                    ),
+                    // tabBarBadge: 3,
+                }} />
         </Tabs>
     );
 }
