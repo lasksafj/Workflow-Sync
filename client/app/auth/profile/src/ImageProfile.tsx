@@ -5,6 +5,7 @@ import * as ImagePicker from "expo-image-picker";
 import { useAppSelector } from "@/store/hooks";
 import { RootState } from "@/store/store";
 import { Avatar } from "@/components/Avatar";
+import { MaterialCommunityIcons } from "@expo/vector-icons";
 
 const ImageProfile = () => {
     const user = useAppSelector((state: RootState) => state.user);
@@ -77,6 +78,12 @@ const ImageProfile = () => {
                         " " +
                         user.profile.lastName
                     } size={100} />
+                    <MaterialCommunityIcons
+                        name="camera-outline"
+                        size={24}
+                        color="#000"
+                        style={styles.cameraIcon}
+                    />
                 </TouchableOpacity>
             </View>
         </View>
@@ -94,5 +101,13 @@ const styles = StyleSheet.create({
         flexDirection: "column",
         alignItems: "center",
         backgroundColor: "#fff",
+    },
+    cameraIcon: {
+        position: 'absolute',
+        bottom: 0, // Adjust for position inside the circle
+        right: 0,  // Adjust for position inside the circle
+        backgroundColor: '#fff',
+        borderRadius: 12,
+        padding: 2, // Add padding for the background behind the icon
     },
 });
