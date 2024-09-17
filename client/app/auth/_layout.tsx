@@ -24,6 +24,15 @@ export default function TabLayout() {
                 }}
             />
             <Tabs.Screen
+                name="profile"
+                options={{
+                    title: "Profile",
+                    tabBarIcon: ({ color, size }) => (
+                        <MaterialCommunityIcons name="account" color={color} size={size} />
+                    ),
+                }}
+            />
+            <Tabs.Screen
                 name="notification"
                 options={{
                     title: 'Notifications',
@@ -31,7 +40,8 @@ export default function TabLayout() {
                         <MaterialCommunityIcons name="bell" color={color} size={size} />
                     ),
                     // tabBarBadge: 3,
-                }} />
+                }}
+            />
         </Tabs>
     );
 }
