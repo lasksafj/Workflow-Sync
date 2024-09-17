@@ -5,6 +5,7 @@ const bodyParser = require('body-parser');
 const cors = require('cors');
 const requestLogger = require('./middlewares/loggerMiddleware');
 const userRoutes = require('./routes/userRoutes');
+const profileRoutes = require("./routes/profileRoutes");
 
 
 
@@ -17,6 +18,7 @@ app.use(requestLogger);
 
 // Routes
 app.use('/api/user', userRoutes);
+app.use("/api/profile", profileRoutes);
 
 
 // Start the server
