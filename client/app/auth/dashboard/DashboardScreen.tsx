@@ -171,7 +171,7 @@ export default function DashboardScreen() {
                         <View style={styles.detailRow}>
                             <Icon name="calendar" size={20} color="#4b5563" />
                             <Text style={styles.detailsText}>
-                                {moment(selectedDetails.date, "YYYY-MM-DD").format("DD/MM/YYYY")}
+                                {moment(selectedDetails.date, "YYYY-MM-DD").format("MM/DD/YYYY")}
                             </Text>
                         </View>
                         <View style={styles.detailRow}>
