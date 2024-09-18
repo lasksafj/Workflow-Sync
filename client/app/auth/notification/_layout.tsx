@@ -5,7 +5,7 @@ export default function NotificationsLayout() {
     return (
         <Stack>
             <Stack.Screen name="NotificationScreen" options={{ headerTitle: "Notifications" }} />
-            <Stack.Screen name="NotificationDetail" />
+            <Stack.Screen name="NotificationDetail" options={{ headerTitle: "Notification Detail", headerBackTitleVisible: false }} />
         </Stack>
     );
 }

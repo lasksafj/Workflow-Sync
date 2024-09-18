@@ -88,12 +88,7 @@ const styles = StyleSheet.create({
     contentBox: {
         padding: 15,
         backgroundColor: "#fff",
-        borderRadius: 10,
-        shadowColor: "#000",
-        shadowOffset: { width: 0, height: 1 },
-        shadowOpacity: 0.1,
-        shadowRadius: 5,
-        elevation: 3,
+        borderRadius: 5,
     },
     content: {
         fontSize: 16,
