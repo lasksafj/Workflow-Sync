@@ -43,7 +43,7 @@ export default function Welcome() {
         <SafeAreaView style={styles.container}>
             <StatusBar backgroundColor="#161622" style="light" />
             <ImageBackground
-                source={require('@/assets/images/splash.jpg')} // Replace with your own image
+                source={require('@/assets/images/Garaco-logo3.jpg')} // Replace with your own image
                 style={styles.backgroundImage}>
                 <View style={styles.overlay}>
                     <View style={styles.contentContainer}>

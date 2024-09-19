@@ -13,6 +13,7 @@ import { router } from 'expo-router';
 import { loginLocal } from '@/apis/authorize/login';
 import { userLogin } from '@/store/slices/userSlice';
 import { useAppDispatch } from '@/store/hooks';
+import { updateOrganization } from '@/store/slices/organizationSlice';
 
 const Login = () => {
     const [email, setEmail] = useState('');
@@ -27,6 +28,16 @@ const Login = () => {
 
             if (response.status) {
                 dispatch(userLogin(response.data));
+
+
+                dispatch(updateOrganization({
+                    abbreviation: 'ORG1',
+                    name: 'Organization One',
+                    address: '123 Main St'
+                }));
+
+
+
                 router.push('auth');
             }
         } catch (err) {
