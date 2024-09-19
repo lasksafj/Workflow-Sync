@@ -1,5 +1,5 @@
 import api from "@/apis/api";
-import { useAppSelector } from "@/store/hooks";
+import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import { RootState } from "@/store/store";
 import React, { useEffect, useMemo, useState } from "react";
 import {
@@ -9,9 +9,14 @@ import {
     Text,
     ScrollView,
     RefreshControl,
+    Button,
 } from "react-native";
 import Icon from "react-native-vector-icons/FontAwesome";
 import moment from "moment";
+import { logout } from "@/apis/authorize/login";
+import { userLogout } from "@/store/slices/userSlice";
+import { router } from "expo-router";
+import { updateOrganization } from "@/store/slices/organizationSlice";
 
 const tabs = [
     { name: "Mon" },
@@ -56,7 +61,8 @@ const formatTime = (timeString: string) => {
 export default function DashboardScreen() {
     const user = useAppSelector((state: RootState) => state.user);
     const organization = useAppSelector((state: RootState) => state.organization);
-    
+    const dispatch = useAppDispatch();
+
     // Initial selectedIndex set to current day
     const [selectedIndex, setSelectedIndex] = useState((new Date().getDay() + 6) % 7);
     const [shiftDetail, setShiftDetail] = useState(sampleDetails);
@@ -179,8 +185,8 @@ export default function DashboardScreen() {
                             <Text style={styles.detailsText}>
                                 {selectedDetails.shiftStart !== "N/A"
                                     ? `${formatTime(selectedDetails.shiftStart)} - ${formatTime(
-                                          selectedDetails.shiftEnd
-                                      )}`
+                                        selectedDetails.shiftEnd
+                                    )}`
                                     : "N/A"}
                             </Text>
                         </View>
@@ -217,6 +223,13 @@ export default function DashboardScreen() {
                         )}
                     </View>
                 </View>
+
+                <Button title="Logout" onPress={() => {
+                    logout();
+                    dispatch(userLogout());
+                    router.replace('');
+                }} />
+
             </ScrollView>
         </View>
     );
