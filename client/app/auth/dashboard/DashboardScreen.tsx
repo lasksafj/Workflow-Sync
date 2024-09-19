@@ -56,7 +56,7 @@ const formatTime = (timeString: string) => {
 export default function DashboardScreen() {
     const user = useAppSelector((state: RootState) => state.user);
     const organization = useAppSelector((state: RootState) => state.organization);
-
+    
     // Initial selectedIndex set to current day
     const [selectedIndex, setSelectedIndex] = useState((new Date().getDay() + 6) % 7);
     const [shiftDetail, setShiftDetail] = useState(sampleDetails);
