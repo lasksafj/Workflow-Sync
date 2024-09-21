@@ -3,21 +3,20 @@ import { router, Stack } from "expo-router";
 import { Text, StyleSheet, View, Modal, Button } from "react-native";
 import { logout } from "@/apis/authorize/login";
 import { userLogout } from "@/store/slices/userSlice";
+import { useAppDispatch, useAppSelector } from "@/store/hooks";
+import { RootState } from "@/store/store";
 
 type LogoutProps = {
     logOutVisible: boolean;
     setLogOutVisible: React.Dispatch<React.SetStateAction<boolean>>;
-    handleLogout: () => void;
 };
 
 const Logout = ({
     logOutVisible,
     setLogOutVisible,
-    handleLogout,
 }: LogoutProps) => {
-    function dispatch(arg0: any) {
-        throw new Error("Function not implemented.");
-    }
+    // const router = useRouter();
+    const dispatch = useAppDispatch();
 
     return (
         <Modal
@@ -25,7 +24,7 @@ const Logout = ({
             transparent={true}
             visible={logOutVisible}
             onRequestClose={() => {
-                setLogOutVisible(!logOutVisible);
+                setLogOutVisible(false);
             }}
         >
             <View style={styles.modalOverlay}>
@@ -35,7 +34,19 @@ const Logout = ({
                         Are you sure you want to log out?
                     </Text>
                     <View style={styles.modalButtons}>
-                        <Button title="Yes" onPress={handleLogout} />
+                        <Button
+                            title="Yes"
+                            onPress={() => {
+                                setLogOutVisible(false);
+                                logout();
+                                // console.log("Logout");
+                                router.dismissAll();
+                                // router.replace('');
+                                // router.push('');
+                                // console.log("aaaaaaaaaaaaaaaa");
+                                dispatch(userLogout());
+                            }}
+                        />
                         <Button
                             title="No"
                             onPress={() => setLogOutVisible(false)}

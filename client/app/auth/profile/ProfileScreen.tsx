@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useNavigation, useRouter } from "expo-router";
+import { useNavigation, useRouter, router } from "expo-router";
 import { SafeAreaView } from "react-native";
 import {
     ScrollView,
@@ -34,7 +34,7 @@ interface LinkProps {
 }
 
 const ProfileScreen = () => {
-    const router = useRouter();
+    // const router = useRouter();
     const navigation = useNavigation();
 
 
@@ -161,13 +161,13 @@ const ProfileScreen = () => {
     const [switchWorkplaceVisible, setSwitchWorkplaceVisible] = useState(false);
     const [employeeListVisible, setEmployeeListVisible] = useState(false);
 
-    const handleLogout = () => {
-        setLogOutVisible(false);
-        logout();
-        dispatch(userLogout());
-        router.replace("");
-        // alert("Logged out!");
-    };
+    // const handleLogout = () => {
+    //     setLogOutVisible(false);
+    //     logout();
+    //     dispatch(userLogout());
+    //     router.replace('');
+    //     // alert("Logged out!");
+    // };
 
     const renderSectionHeader = ({
         section: { header },
@@ -267,7 +267,6 @@ const ProfileScreen = () => {
             <Logout
                 logOutVisible={logOutVisible}
                 setLogOutVisible={setLogOutVisible}
-                handleLogout={handleLogout}
             />
             <SwitchWorkplace
                 switchWorkplaceVisible={switchWorkplaceVisible}

@@ -11,8 +11,10 @@ import { updateOrganization } from '@/store/slices/organizationSlice';
 
 export default function TabLayout() {
 
-    const user = useAppSelector((state: RootState) => state.user)
-    const dispatch = useAppDispatch()
+    const user = useAppSelector((state: RootState) => state.user);
+    const organization = useAppSelector((state: RootState) => state.organization);
+    const dispatch = useAppDispatch();
+
     useEffect(() => {
         api.get('/api/user/protected?number=123987')
             .then((res) => {
@@ -33,6 +35,11 @@ export default function TabLayout() {
             name: 'Organization One',
             address: '123 Main St'
         }));
+        console.log('user', user);
+
+        console.log('organization', organization);
+
+
     }, []);
 
     return (
