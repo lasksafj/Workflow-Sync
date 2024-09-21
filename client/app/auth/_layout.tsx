@@ -12,35 +12,26 @@ import { updateOrganization } from '@/store/slices/organizationSlice';
 export default function TabLayout() {
 
     const user = useAppSelector((state: RootState) => state.user);
-    const organization = useAppSelector((state: RootState) => state.organization);
     const dispatch = useAppDispatch();
 
-    useEffect(() => {
-        api.get('/api/user/protected?number=123987')
-            .then((res) => {
-                console.log('INDEX API get -----', res.data);
-            })
-            .catch(err => {
-                console.log('INDEX API err----', err);
-                // if (err.unauthorized) {
-                //     alert('LOGOUT');
-                //     router.replace('');
-                //     logout();
-                //     dispatch(userLogout());
-                // }
-            });
 
-        dispatch(updateOrganization({
-            abbreviation: 'ORG1',
-            name: 'Organization One',
-            address: '123 Main St'
-        }));
-        console.log('user', user);
+    // useEffect(() => {
 
-        console.log('organization', organization);
+    //     api.get('/api/user/protected?number=123987')
+    //         .then((res) => {
+    //             console.log('INDEX API get -----', res.data);
+    //         })
+    //         .catch(err => {
+    //             console.log('INDEX API err----', err);
+    //             // if (err.unauthorized) {
+    //             //     alert('LOGOUT');
+    //             //     router.replace('');
+    //             //     logout();
+    //             //     dispatch(userLogout());
+    //             // }
+    //         });
 
-
-    }, []);
+    // }, []);
 
     return (
         <Tabs
