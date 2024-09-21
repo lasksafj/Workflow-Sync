@@ -1,23 +1,25 @@
 import React from "react";
-import { router, Stack } from "expo-router";
+import { router } from "expo-router";
 import { Text, StyleSheet, View, Modal, Button } from "react-native";
 import { logout } from "@/apis/authorize/login";
 import { userLogout } from "@/store/slices/userSlice";
-import { useAppDispatch, useAppSelector } from "@/store/hooks";
-import { RootState } from "@/store/store";
+import { useAppDispatch } from "@/store/hooks";
 
+// Props type definition for controlling the modal visibility
 type LogoutProps = {
     logOutVisible: boolean;
     setLogOutVisible: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
+// Component to render the logout modal
 const Logout = ({
     logOutVisible,
     setLogOutVisible,
 }: LogoutProps) => {
-    // const router = useRouter();
+    // Redux dispatch hook
     const dispatch = useAppDispatch();
 
+    // Render the modal
     return (
         <Modal
             animationType="slide"
@@ -34,6 +36,7 @@ const Logout = ({
                         Are you sure you want to log out?
                     </Text>
                     <View style={styles.modalButtons}>
+                        {/* Logout confirmation buttons */}
                         <Button
                             title="Yes"
                             onPress={() => {
@@ -47,6 +50,7 @@ const Logout = ({
                                 dispatch(userLogout());
                             }}
                         />
+                        {/* Cancel logout */}
                         <Button
                             title="No"
                             onPress={() => setLogOutVisible(false)}
@@ -58,6 +62,7 @@ const Logout = ({
     );
 };
 
+// Styles
 const styles = StyleSheet.create({
     modalOverlay: {
         flex: 1,

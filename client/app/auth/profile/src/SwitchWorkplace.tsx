@@ -1,14 +1,5 @@
 import React, { useEffect } from "react";
-import {
-    StyleSheet,
-    View,
-    Text,
-    Modal,
-    TouchableOpacity,
-    FlatList,
-    TextInput,
-    Dimensions,
-} from "react-native";
+import { StyleSheet, View, Text, Modal, TouchableOpacity, TextInput, Dimensions, } from "react-native";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import { RootState } from "@/store/store";
 import { Feather as FeatherIcon } from "@expo/vector-icons";
@@ -18,18 +9,26 @@ import { router } from "expo-router";
 import { SafeAreaView } from "react-native";
 import { FlashList } from "@shopify/flash-list";
 
+// Props type for SwitchWorkplace component to handle modal visibility
 type SwitchProps = {
     switchWorkplaceVisible: boolean;
     setSwitchWorkplaceVisible: React.Dispatch<React.SetStateAction<boolean>>;
 };
+
+// Main component to switch between workplaces
 const SwitchWorkplace = ({
     switchWorkplaceVisible,
     setSwitchWorkplaceVisible,
 }: SwitchProps) => {
+    // Get the user's profile data from the Redux store
     const user = useAppSelector((state: RootState) => state.user);
+
+    // Get the organization data from the Redux store
     const organization = useAppSelector(
         (state: RootState) => state.organization
     );
+
+    // Redux dispatch for state updates
     const dispatch = useAppDispatch();
     const [text, onChangeText] = React.useState("");
     const [workplaces, setWorkplaces] = React.useState<
@@ -41,6 +40,7 @@ const SwitchWorkplace = ({
         }[]
     >([]);
 
+    // Fetch the organization data from the API
     useEffect(() => {
         api.get("/api/profile/profile-getOrg")
             .then((response) => {
@@ -54,6 +54,7 @@ const SwitchWorkplace = ({
     }, []); // [] dieu kien chay tiep. [] thi chay 1 lan
 
     // console.log(workplaces);
+    // Type definition for individual workplace items
     type ItemProps = {
         id: string;
         name: string;
@@ -61,6 +62,7 @@ const SwitchWorkplace = ({
         address: string;
     };
 
+    // Header component for the modal
     const Header = () => (
         <View style={styles.header}>
             <TouchableOpacity
@@ -80,10 +82,12 @@ const SwitchWorkplace = ({
         </View>
     );
 
+    // Item component to display each workplace in the list
     const Item = ({ id, name, abbreviation, address }: ItemProps) => (
         <View style={styles.rowWraper}>
             <TouchableOpacity
                 onPress={() => {
+                    // Dispatch action to update the current organization
                     dispatch(
                         updateOrganization({
                             id: id,
@@ -92,8 +96,8 @@ const SwitchWorkplace = ({
                             address: address,
                         })
                     );
-                    setSwitchWorkplaceVisible(false);
-                    router.replace('auth/dashboard');
+                    setSwitchWorkplaceVisible(false); // Close the modal
+                    router.replace('auth/dashboard'); // Navigate to the dashboard
                 }}
             >
                 <View>
@@ -110,6 +114,8 @@ const SwitchWorkplace = ({
             </TouchableOpacity>
         </View>
     );
+
+    // Render the component
     return (
         <Modal
             animationType="slide"
@@ -127,6 +133,8 @@ const SwitchWorkplace = ({
                             All Workplaces
                         </Text>
                     </View>
+
+                    {/*Display the list of workplaces*/}
                     <FlashList
                         data={workplaces}
                         renderItem={({ item }) => <Item {...item} />}
@@ -156,6 +164,7 @@ const SwitchWorkplace = ({
 
 export default SwitchWorkplace;
 
+// Styles
 const styles = StyleSheet.create({
     safeArea: {
         flex: 1,

@@ -1,31 +1,25 @@
 import React, { useEffect, useState } from "react";
-import { useNavigation, useRouter, router } from "expo-router";
+import { useNavigation } from "expo-router";
 import { SafeAreaView } from "react-native";
-import {
-    ScrollView,
-    Text,
-    StyleSheet,
-    View,
-    TouchableOpacity,
-    SectionList,
-} from "react-native";
+import { ScrollView, Text, StyleSheet, View, TouchableOpacity } from "react-native";
 import { Feather as FeatherIcon } from "@expo/vector-icons";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import { RootState } from "@/store/store";
-import { logout } from "@/apis/authorize/login";
-import { userLogout } from "@/store/slices/userSlice";
 import api from "@/apis/api";
 
+// Custom components
 import ImageProfile from "./src/ImageProfile";
 import Logout from "./src/Logout";
 import SwitchWorkplace from "./src/SwitchWorkplace";
 
+// Interface to define the structure of profile items
 interface ItemProps {
     id: string;
     label: string;
     value: any;
 }
 
+// Interface to define the structure of link items
 interface LinkProps {
     id: string;
     label: string;
@@ -33,11 +27,11 @@ interface LinkProps {
     type: string;
 }
 
+// ProfileScreen component
 const ProfileScreen = () => {
-    // const router = useRouter();
     const navigation = useNavigation();
 
-
+    // Get user and organization data from the store
     const user = useAppSelector((state: RootState) => state.user);
     const organization = useAppSelector(
         (state: RootState) => state.organization
@@ -46,13 +40,14 @@ const ProfileScreen = () => {
     // console.log("ProfileScreen", user.profile);
     console.log("ProfileScreen", organization);
 
-    // format date
+    // Format date of birth
     const date = user.profile.dateOfBirth
         ? new Date(user.profile.dateOfBirth)
         : undefined;
 
     const [role, setRole] = useState<string>("");
 
+    // Define the sections of the profile and organization
     let section = [
         {
             header: "Profile Settings",
@@ -95,6 +90,7 @@ const ProfileScreen = () => {
         },
     ];
 
+    // Define the sections of the utilities
     const LINKSECTIONS = [
         {
             header: "Utilities",
@@ -127,21 +123,7 @@ const ProfileScreen = () => {
         },
     ];
 
-    useEffect(() => {
-        navigation.setOptions({
-            headerRight: () => (
-                <TouchableOpacity
-                    onPress={() => {
-                        setEditProfileVisible(true);
-                    }}
-                >
-                    <Text style={styles.title}>Edit</Text>
-                </TouchableOpacity>
-            ),
-            headerTitleStyle: styles.title,
-        });
-    }, []);
-
+    // Get role of the user in the organization
     useEffect(() => {
         let org = organization.abbreviation; // Organization ID
         api.get("/api/profile/profile-getRole?org=" + org)
@@ -155,20 +137,12 @@ const ProfileScreen = () => {
             });
     }, [organization]); // [] dieu kien chay tiep. [] thi chay 1 lan
 
+    // State for controlling visibility of 'Logout' and 'Switch Workplace' modals
     // console.log("ProfileScreen", user.profile);
     const [logOutVisible, setLogOutVisible] = useState(false);
-    const [editProfileVisible, setEditProfileVisible] = useState(false);
     const [switchWorkplaceVisible, setSwitchWorkplaceVisible] = useState(false);
-    const [employeeListVisible, setEmployeeListVisible] = useState(false);
 
-    // const handleLogout = () => {
-    //     setLogOutVisible(false);
-    //     logout();
-    //     dispatch(userLogout());
-    //     router.replace('');
-    //     // alert("Logged out!");
-    // };
-
+    // Helper function to render section header
     const renderSectionHeader = ({
         section: { header },
     }: {
@@ -181,6 +155,7 @@ const ProfileScreen = () => {
         </View>
     );
 
+    // Helper function to render profile items
     const RenderItems = ({ id, label, value }: ItemProps, index: number) => (
         <View
             style={[styles.rowWraper, index === 0 && { borderBottomWidth: 0 }]}
@@ -194,6 +169,7 @@ const ProfileScreen = () => {
         </View>
     );
 
+    // Helper function to render link items
     const RenderLinkItems = ({ id, label, icon, type }: LinkProps, index: number) => (
         <View
             style={[styles.rowWraper, index === 0 && { borderBottomWidth: 0 },]}
@@ -207,9 +183,6 @@ const ProfileScreen = () => {
                     }
                     if (id === "switchworkplace") {
                         setSwitchWorkplaceVisible(true);
-                    }
-                    if (id === "employeelist") {
-                        setEmployeeListVisible(true);
                     }
                 }}
             >
@@ -236,11 +209,13 @@ const ProfileScreen = () => {
         </View>
     );
 
+    // Render the ProfileScreen component
     return (
         <SafeAreaView style={{ flex: 1 }}>
             <ScrollView style={styles.container}>
-                <ImageProfile />
+                <ImageProfile /> {/* Component to display the user's profile avatar */}
 
+                {/*Render the profile sections*/}
                 {section.map(({ header, items }) => (
                     <View style={styles.section} key={header}>
                         {renderSectionHeader({ section: { header: header } })}
@@ -252,6 +227,7 @@ const ProfileScreen = () => {
                     </View>
                 ))}
 
+                {/*Render the link sections*/}
                 {LINKSECTIONS.map(({ header, items }) => (
                     <View style={styles.section} key={header}>
                         {renderSectionHeader({ section: { header: header } })}
@@ -264,6 +240,7 @@ const ProfileScreen = () => {
                 ))}
             </ScrollView>
 
+            {/*Modals for 'Logout' and 'Switch Workplace'*/}
             <Logout
                 logOutVisible={logOutVisible}
                 setLogOutVisible={setLogOutVisible}
@@ -278,6 +255,7 @@ const ProfileScreen = () => {
 
 export default ProfileScreen;
 
+// Styles
 const styles = StyleSheet.create({
     container: {
 
@@ -314,11 +292,6 @@ const styles = StyleSheet.create({
         textTransform: "uppercase",
         letterSpacing: 1.2,
     },
-    // sectionBody: {
-    //   paddingHorizontal: 24,
-    //   paddingVertical: 12,
-    // },
-    //make line for each row
     rowWraper: {
         paddingLeft: 24,
         borderTopWidth: 1,
