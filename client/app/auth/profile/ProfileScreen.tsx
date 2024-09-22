@@ -9,17 +9,16 @@ import api from "@/apis/api";
 
 // Custom components
 import ImageProfile from "./src/ImageProfile";
-import Logout from "./src/Logout";
 import SwitchWorkplace from "./src/SwitchWorkplace";
 
-// Interface to define the structure of profile items
+// Interface of Profile Items
 interface ItemProps {
     id: string;
     label: string;
     value: any;
 }
 
-// Interface to define the structure of link items
+// Interface of Link Items
 interface LinkProps {
     id: string;
     label: string;
@@ -27,31 +26,32 @@ interface LinkProps {
     type: string;
 }
 
-// ProfileScreen component
+// Main component for the Profile screen
 const ProfileScreen = () => {
+    // Navigation
     const navigation = useNavigation();
 
-    // Get user and organization data from the store
+    //Select user and organization data from Redux store
     const user = useAppSelector((state: RootState) => state.user);
     const organization = useAppSelector(
         (state: RootState) => state.organization
     );
-    const dispatch = useAppDispatch(); //luu du lieu vao store va refresh app xai du lieu do
+
     // console.log("ProfileScreen", user.profile);
     console.log("ProfileScreen", organization);
 
-    // Format date of birth
+    // Format Date of Birth
     const date = user.profile.dateOfBirth
         ? new Date(user.profile.dateOfBirth)
         : undefined;
 
     const [role, setRole] = useState<string>("");
 
-    // Define the sections of the profile and organization
+    // Profile and workplace information sections
     let section = [
         {
             header: "Profile Settings",
-            // use items for map, data for SectionList
+            // Profile data for display
             items: [
                 {
                     id: "name",
@@ -73,7 +73,7 @@ const ProfileScreen = () => {
         },
         {
             header: "Workplace",
-            // use items for map, data for SectionList
+            // Organization data for display
             items: [
                 { id: "namewp", label: "Name", value: organization.name },
                 {
@@ -90,7 +90,7 @@ const ProfileScreen = () => {
         },
     ];
 
-    // Define the sections of the utilities
+    // Link sections for utilities
     const LINKSECTIONS = [
         {
             header: "Utilities",
@@ -123,7 +123,23 @@ const ProfileScreen = () => {
         },
     ];
 
-    // Get role of the user in the organization
+    // Set header title and edit button
+    useEffect(() => {
+        navigation.setOptions({
+            headerRight: () => (
+                <TouchableOpacity
+                    onPress={() => {
+                        console.log("Edit Profile Pressed!");
+                    }}
+                >
+                    <Text style={styles.title}>Edit</Text>
+                </TouchableOpacity>
+            ),
+            headerTitleStyle: styles.title,
+        });
+    }, []);
+
+    // Get user role in organization
     useEffect(() => {
         let org = organization.abbreviation; // Organization ID
         api.get("/api/profile/profile-getRole?org=" + org)
@@ -137,9 +153,7 @@ const ProfileScreen = () => {
             });
     }, [organization]); // [] dieu kien chay tiep. [] thi chay 1 lan
 
-    // State for controlling visibility of 'Logout' and 'Switch Workplace' modals
     // console.log("ProfileScreen", user.profile);
-    const [logOutVisible, setLogOutVisible] = useState(false);
     const [switchWorkplaceVisible, setSwitchWorkplaceVisible] = useState(false);
 
     // Helper function to render section header
@@ -155,7 +169,7 @@ const ProfileScreen = () => {
         </View>
     );
 
-    // Helper function to render profile items
+    // Helper function to render items
     const RenderItems = ({ id, label, value }: ItemProps, index: number) => (
         <View
             style={[styles.rowWraper, index === 0 && { borderBottomWidth: 0 }]}
@@ -178,8 +192,7 @@ const ProfileScreen = () => {
             <TouchableOpacity
                 onPress={() => {
                     if (id === "logout") {
-                        setLogOutVisible(true);
-                        // console.log("Logout Pressed!");
+                        console.log("Logout Pressed!");
                     }
                     if (id === "switchworkplace") {
                         setSwitchWorkplaceVisible(true);
@@ -209,13 +222,12 @@ const ProfileScreen = () => {
         </View>
     );
 
-    // Render the ProfileScreen component
+    // Render the Profile screen
     return (
         <SafeAreaView style={{ flex: 1 }}>
             <ScrollView style={styles.container}>
-                <ImageProfile /> {/* Component to display the user's profile avatar */}
+                <ImageProfile />
 
-                {/*Render the profile sections*/}
                 {section.map(({ header, items }) => (
                     <View style={styles.section} key={header}>
                         {renderSectionHeader({ section: { header: header } })}
@@ -227,7 +239,6 @@ const ProfileScreen = () => {
                     </View>
                 ))}
 
-                {/*Render the link sections*/}
                 {LINKSECTIONS.map(({ header, items }) => (
                     <View style={styles.section} key={header}>
                         {renderSectionHeader({ section: { header: header } })}
@@ -240,11 +251,7 @@ const ProfileScreen = () => {
                 ))}
             </ScrollView>
 
-            {/*Modals for 'Logout' and 'Switch Workplace'*/}
-            <Logout
-                logOutVisible={logOutVisible}
-                setLogOutVisible={setLogOutVisible}
-            />
+            {/* Switch Workplace Modal */}
             <SwitchWorkplace
                 switchWorkplaceVisible={switchWorkplaceVisible}
                 setSwitchWorkplaceVisible={setSwitchWorkplaceVisible}

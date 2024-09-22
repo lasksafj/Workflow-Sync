@@ -39,12 +39,12 @@ const Logout = ({
                         {/* Logout confirmation buttons */}
                         <Button
                             title="Yes"
-                            onPress={() => {
+                            onPress={async () => {
                                 setLogOutVisible(false);
-                                logout();
+                                await logout();
                                 // console.log("Logout");
-                                router.dismissAll();
-                                // router.replace('');
+                                // router.dismissAll();
+                                router.replace('');
                                 // router.push('');
                                 // console.log("aaaaaaaaaaaaaaaa");
                                 dispatch(userLogout());
