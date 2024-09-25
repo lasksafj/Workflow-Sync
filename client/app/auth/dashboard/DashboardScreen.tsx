@@ -1,14 +1,7 @@
-<<<<<<< Updated upstream
-import api from "@/apis/api";
-import { useAppSelector } from "@/store/hooks";
-import { RootState } from "@/store/store";
-import React, { useEffect, useMemo, useState } from "react";
-=======
 import api from "@/apis/api"; // Import the API instance for making HTTP requests
 import { useAppDispatch, useAppSelector } from "@/store/hooks"; // Import Redux hooks
 import { RootState } from "@/store/store"; // Import the RootState type
 import React, { useEffect, useMemo, useState } from "react"; // Import React and hooks
->>>>>>> Stashed changes
 import {
     StyleSheet,
     View,
@@ -16,11 +9,6 @@ import {
     Text,
     ScrollView,
     RefreshControl,
-<<<<<<< Updated upstream
-} from "react-native";
-import Icon from "react-native-vector-icons/FontAwesome";
-import moment from "moment";
-=======
     Button,
     Modal,
     TouchableOpacity,
@@ -31,7 +19,6 @@ import { logout } from "@/apis/authorize/login"; // Import logout API
 import { userLogout } from "@/store/slices/userSlice"; // Import Redux action to update user state
 import { router } from "expo-router"; // Import Expo router for navigation
 import { updateOrganization } from "@/store/slices/organizationSlice"; // Import Redux action for organization state
->>>>>>> Stashed changes
 
 // Define the tabs for days of the week
 const tabs = [
@@ -311,19 +298,6 @@ export default function DashboardScreen() {
                         )}
                     </View>
                 </View>
-<<<<<<< Updated upstream
-=======
-
-                {/* Logout Button */}
-                <Button
-                    title="Logout"
-                    onPress={() => {
-                        logout(); // Call logout API
-                        dispatch(userLogout()); // Update Redux state
-                        router.replace(""); // Navigate back to the login screen
-                    }}
-                />
->>>>>>> Stashed changes
             </ScrollView>
 
             {/* Modal for Event Details */}
