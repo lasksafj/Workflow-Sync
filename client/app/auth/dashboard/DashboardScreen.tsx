@@ -46,17 +46,13 @@ type DetailType = {
 };
 
 // Initialize sample shift details with default values
-let sampleDetails: DetailType[] = Array.from({ length: 7 }, () => ({
+let sampleDetails: any = Array.from({ length: 7 }, () => ({
     date: "",
     shiftStart: "N/A",
     shiftEnd: "N/A",
     role: "N/A",
     location: "N/A",
-    upcomingEvent: {
-        time: '',
-        attendees: '',
-        description: ''
-    },
+    upcomingEvent: null,
 }));
 
 // Function to format time strings into a readable format
@@ -101,7 +97,7 @@ export default function DashboardScreen() {
         api.get(`/api/dashboard/get-detail-shift?orgAbbr=${organization.abbreviation}`)
             .then((res) => {
                 const data = res.data;
-                let newShiftDetail = sampleDetails.map((detail) => ({
+                let newShiftDetail = sampleDetails.map((detail:any) => ({
                     ...detail,
                 }));
 
