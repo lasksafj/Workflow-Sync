@@ -20,6 +20,7 @@ import { userLogout } from "@/store/slices/userSlice"; // Import Redux action to
 import { router } from "expo-router"; // Import Expo router for navigation
 import { updateOrganization } from "@/store/slices/organizationSlice"; // Import Redux action for organization state
 
+
 // Define the tabs for days of the week
 const tabs = [
     { name: "Mon" },
@@ -30,6 +31,7 @@ const tabs = [
     { name: "Sat" },
     { name: "Sun" },
 ];
+
 
 // Define the type for shift details
 type DetailType = {
@@ -45,6 +47,7 @@ type DetailType = {
     };
 };
 
+
 // Initialize sample shift details with default values
 let sampleDetails: any = Array.from({ length: 7 }, () => ({
     date: "",
@@ -54,6 +57,7 @@ let sampleDetails: any = Array.from({ length: 7 }, () => ({
     location: "N/A",
     upcomingEvent: null,
 }));
+
 
 // Function to format time strings into a readable format
 const formatTime = (timeString: string) => {
@@ -68,6 +72,7 @@ const formatTime = (timeString: string) => {
     return strTime;
 };
 
+
 // Main component for the dashboard screen
 export default function DashboardScreen() {
     // Access user and organization state from Redux store
@@ -81,7 +86,9 @@ export default function DashboardScreen() {
     const [refreshing, setRefreshing] = useState(false); // Refresh control state
     const [modalVisible, setModalVisible] = useState(false); // Modal visibility state
 
+
     const selectedDetails = shiftDetail[selectedIndex]; // Details of the currently selected day
+
 
     // Generate an array of dates for the current week starting from Monday
     const daysOfWeek = useMemo(
@@ -92,6 +99,7 @@ export default function DashboardScreen() {
         []
     );
 
+
     // Fetch shift details from the API
     const fetchShiftDetails = () => {
         api.get(`/api/dashboard/get-detail-shift?orgAbbr=${organization.abbreviation}`)
@@ -101,10 +109,12 @@ export default function DashboardScreen() {
                     ...detail,
                 }));
 
+
                 // Set the dates for the shift details
                 for (let i = 0; i < 7; i++) {
                     newShiftDetail[i].date = daysOfWeek[i];
                 }
+
 
                 // Update shift details with data from the API
                 data.forEach((d: any) => {
@@ -118,6 +128,7 @@ export default function DashboardScreen() {
                         }
                     }
                 });
+
 
                 // Add sample upcoming events (for demo purposes)
                 newShiftDetail[2].upcomingEvent = {
@@ -145,8 +156,10 @@ export default function DashboardScreen() {
                         "GARACO Party\nSet Menu: #8\nBeverages: Open\nBar: Open\nNote: Company meetup, try not to interrupt CEO's presentation",
                 };
 
+
                 setShiftDetail(newShiftDetail); // Update state with new shift details
                 setRefreshing(false); // Stop the refresh indicator
+
 
                 // Reset selected index to the current day
                 setSelectedIndex((new Date().getDay() + 6) % 7);
@@ -157,16 +170,19 @@ export default function DashboardScreen() {
             });
     };
 
+
     // Fetch shift details on component mount
     useEffect(() => {
         fetchShiftDetails();
     }, []);
+
 
     // Handle pull-to-refresh action
     const onRefresh = () => {
         setRefreshing(true);
         fetchShiftDetails();
     };
+
 
     return (
         <View style={{ flex: 1, backgroundColor: "white" }}>
@@ -187,10 +203,12 @@ export default function DashboardScreen() {
                 {/* Header Text */}
                 <Text style={styles.textHeader}>Your upcoming schedules:</Text>
 
+
                 {/* Tabs for days of the week */}
                 <View style={styles.container}>
                     {tabs.map((item, index) => {
                         const isActive = index === selectedIndex; // Check if the tab is active
+
 
                         return (
                             <View key={item.name} style={{ flex: 1 }}>
@@ -220,6 +238,7 @@ export default function DashboardScreen() {
                     })}
                 </View>
 
+
                 {/* Shift and event details */}
                 <View style={styles.detailsWrapper}>
                     <View style={styles.detailsContainer}>
@@ -230,6 +249,7 @@ export default function DashboardScreen() {
                                 {moment(selectedDetails.date, "YYYY-MM-DD").format("MM/DD/YYYY")}
                             </Text>
                         </View>
+
 
                         {/* Shift Time */}
                         <View style={styles.detailRow}>
@@ -243,11 +263,13 @@ export default function DashboardScreen() {
                             </Text>
                         </View>
 
+
                         {/* Role */}
                         <View style={styles.detailRow}>
                             <Icon name="user" size={20} color="#4b5563" />
                             <Text style={styles.detailsText}>{selectedDetails.role}</Text>
                         </View>
+
 
                         {/* Location */}
                         <View style={styles.detailRow}>
@@ -255,8 +277,10 @@ export default function DashboardScreen() {
                             <Text style={styles.detailsText}>{selectedDetails.location}</Text>
                         </View>
 
+
                         {/* Divider */}
                         <View style={styles.sectionDivider} />
+
 
                         {/* Upcoming Event Section */}
                         <Text style={styles.sectionHeaderText}>Upcoming Event:</Text>
@@ -270,6 +294,7 @@ export default function DashboardScreen() {
                                     </Text>
                                 </View>
 
+
                                 {/* Attendees */}
                                 <View style={styles.detailRow}>
                                     <Icon name="users" size={20} color="#4b5563" />
@@ -277,6 +302,7 @@ export default function DashboardScreen() {
                                         {selectedDetails.upcomingEvent.attendees}
                                     </Text>
                                 </View>
+
 
                                 {/* View Details Button */}
                                 <TouchableOpacity
@@ -296,13 +322,18 @@ export default function DashboardScreen() {
                     </View>
                 </View>
 
-                <Button title="Logout" onPress={() => {
-                    logout();
-                    dispatch(userLogout());
-                    router.replace('');
-                }} />
 
+                {/* Logout Button */}
+                <Button
+                    title="Logout"
+                    onPress={() => {
+                        logout(); // Call logout API
+                        dispatch(userLogout()); // Update Redux state
+                        router.replace(""); // Navigate back to the login screen
+                    }}
+                />
             </ScrollView>
+
 
             {/* Modal for Event Details */}
             {selectedDetails.upcomingEvent && (
@@ -319,20 +350,24 @@ export default function DashboardScreen() {
                             {/* Modal Title */}
                             <Text style={styles.modalTitle}>Event Details</Text>
 
+
                             {/* Event Time */}
                             <Text style={styles.modalText}>
                                 Time: {selectedDetails.upcomingEvent.time}
                             </Text>
+
 
                             {/* Event Attendees */}
                             <Text style={styles.modalText}>
                                 Attendees: {selectedDetails.upcomingEvent.attendees}
                             </Text>
 
+
                             {/* Event Description */}
                             <Text style={styles.modalText}>
                                 Description: {selectedDetails.upcomingEvent.description}
                             </Text>
+
 
                             {/* Close Button */}
                             <TouchableOpacity
@@ -348,6 +383,7 @@ export default function DashboardScreen() {
         </View>
     );
 }
+
 
 // Stylesheet for the component
 const styles = StyleSheet.create({
