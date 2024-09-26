@@ -77,6 +77,7 @@ export default function DashboardScreen() {
     // Access user and organization state from Redux store
     const user = useAppSelector((state: RootState) => state.user);
     const organization = useAppSelector((state: RootState) => state.organization);
+    const dispatch = useAppDispatch();
 
     // State variables
     const [selectedIndex, setSelectedIndex] = useState((new Date().getDay() + 6) % 7); // Index of the selected day
@@ -240,8 +241,8 @@ export default function DashboardScreen() {
                             <Text style={styles.detailsText}>
                                 {selectedDetails.shiftStart !== "N/A"
                                     ? `${formatTime(selectedDetails.shiftStart)} - ${formatTime(
-                                          selectedDetails.shiftEnd
-                                      )}`
+                                        selectedDetails.shiftEnd
+                                    )}`
                                     : "N/A"}
                             </Text>
                         </View>
@@ -298,6 +299,13 @@ export default function DashboardScreen() {
                         )}
                     </View>
                 </View>
+
+                <Button title="Logout" onPress={() => {
+                    logout();
+                    dispatch(userLogout());
+                    router.replace('');
+                }} />
+
             </ScrollView>
 
             {/* Modal for Event Details */}
