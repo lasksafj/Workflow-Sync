@@ -10,6 +10,7 @@ import api from "@/apis/api";
 // Custom components
 import ImageProfile from "./src/ImageProfile";
 import SwitchWorkplace from "./src/SwitchWorkplace";
+import EditProfile from "./src/EditProfile";
 
 // Interface of Profile Items
 interface ItemProps {
@@ -129,7 +130,8 @@ const ProfileScreen = () => {
             headerRight: () => (
                 <TouchableOpacity
                     onPress={() => {
-                        console.log("Edit Profile Pressed!");
+                        // console.log("Edit Profile Pressed!");
+                        setEditProfileVisible(true);
                     }}
                 >
                     <Text style={styles.title}>Edit</Text>
@@ -155,6 +157,7 @@ const ProfileScreen = () => {
 
     // console.log("ProfileScreen", user.profile);
     const [switchWorkplaceVisible, setSwitchWorkplaceVisible] = useState(false);
+    const [editProfileVisible, setEditProfileVisible] = useState(false);
 
     // Helper function to render section header
     const renderSectionHeader = ({
@@ -256,6 +259,11 @@ const ProfileScreen = () => {
                 switchWorkplaceVisible={switchWorkplaceVisible}
                 setSwitchWorkplaceVisible={setSwitchWorkplaceVisible}
             />
+            <EditProfile
+                editProfileVisible={editProfileVisible}
+                setEditProfileVisible={setEditProfileVisible}
+            />
+
         </SafeAreaView>
     );
 };
