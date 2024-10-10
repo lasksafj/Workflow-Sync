@@ -12,6 +12,8 @@ const userRoutes = require("./routes/userRoutes");
 const profileRoutes = require("./routes/profileRoutes");
 const notificationsRoutes = require("./routes/notificationsRoutes");
 const dashboardRoutes = require("./routes/dashboardRoutes");
+const scheduleRoutes = require("./routes/userSchedules");
+
 
 // Define the port on which the server will listen
 // It first checks for the PORT variable in the environment, otherwise defaults to 3000
@@ -48,6 +50,11 @@ app.use("/api/notifications", notificationsRoutes);
 // Mount the dashboardRoutes module at the '/api/dashboard' path
 // All routes defined in dashboardRoutes will be accessible under '/api/dashboard/*'
 app.use("/api/dashboard", dashboardRoutes); //Quy
+
+//scheduleRoutes
+//app.use("/api/schedule", scheduleRoutes); //Quy
+scheduleRoutes(app)
+
 
 // -------------------- Start the Server -------------------- //
 
