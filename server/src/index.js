@@ -15,11 +15,22 @@ const authSocketMiddleware = require('./middlewares/authSocketMiddleware');
 const chatSocket = require('./socket/chatSocket');
 
 
+// Define the port on which the server will listen
+// It first checks for the PORT variable in the environment, otherwise defaults to 3000
 const PORT = process.env.PORT || 3000;
 
-// Middleware
+// -------------------- Middleware Setup -------------------- //
+
+// Use body-parser middleware to parse JSON request bodies
+// This allows the server to understand JSON payloads in requests
 app.use(bodyParser.json());
+
+// Enable CORS for all routes
+// This allows the server to accept requests from different origins
 app.use(cors());
+
+// Use the custom request logger middleware
+// This middleware logs details about each incoming request for debugging and monitoring
 app.use(requestLogger);
 
 // Routes
