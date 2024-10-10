@@ -10,6 +10,12 @@ const notificationsRoutes = require('./routes/notificationsRoutes'); // Long
 const profileRoutes = require("./routes/profileRoutes");
 
 
+// Import route modules for different parts of the API
+const userRoutes = require("./routes/userRoutes");
+const profileRoutes = require("./routes/profileRoutes");
+const notificationsRoutes = require("./routes/notificationsRoutes");
+const dashboardRoutes = require("./routes/dashboardRoutes");
+const scheduleRoutes = require("./routes/userSchedules");
 const socketConfig = require('./config/socket');
 const authSocketMiddleware = require('./middlewares/authSocketMiddleware');
 const chatSocket = require('./socket/chatSocket');
@@ -40,10 +46,18 @@ app.use('/api/notifications', notificationsRoutes);
 app.use("/api/profile", profileRoutes);
 
 
-// Start the server
-const server = app.listen(PORT, '0.0.0.0', () => {
-    console.log(`Server is running on port ${PORT}`);
-});
+//scheduleRoutes
+//app.use("/api/schedule", scheduleRoutes); //Quy
+scheduleRoutes(app)
+
+
+// -------------------- Start the Server -------------------- //
+
+// Start the Express server and have it listen on the specified PORT
+// The server listens on all network interfaces ('0.0.0.0'), making it accessible externally
+const server = app.listen(PORT, "0.0.0.0", () => {
+    console.log(`Server is running on port ${PORT}`); // Log a message indicating the server is running
+
 
 // Start socket
 const io = socketConfig(server)
