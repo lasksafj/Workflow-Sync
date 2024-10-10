@@ -44,7 +44,7 @@
         "react-dom": "18.2.0",
         "react-hook-form": "^7.51.5",
         "react-native": "0.74.1",
-        "react-native-calendar-picker": "^8.0.4",
+        "react-native-calendar-picker": "^8.0.5",
         "react-native-calendars": "^1.1286.0",
         "react-native-collapsible": "^1.6.1",
         "react-native-gesture-handler": "~2.16.1",
