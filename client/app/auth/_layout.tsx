@@ -8,12 +8,20 @@ import api from '@/apis/api';
 import { useAppDispatch, useAppSelector } from '@/store/hooks';
 import { RootState } from '@/store/store';
 import { updateOrganization } from '@/store/slices/organizationSlice';
+import { connectSockets, disconnectSockets } from '@/socket/socket';
 
 export default function TabLayout() {
 
     const user = useAppSelector((state: RootState) => state.user);
     const dispatch = useAppDispatch();
 
+    useEffect(() => {
+        connectSockets();
+
+        return () => {
+            disconnectSockets();
+        };
+    }, [])
 
     // useEffect(() => {
 
