@@ -22,31 +22,20 @@ import moment from 'moment';
 import { userLogin } from '@/store/slices/userSlice';
 import { useAppDispatch } from '@/store/hooks';
 
-// Define the validation schema using yup
 const schema = yup.object().shape({
     email: yup.string().email('Must be a valid email').required('Email is required'),
     password: yup.string().min(6, 'Password must be at least 6 characters').required('Password is required'),
     firstName: yup.string().required('First name is required'),
     lastName: yup.string().required('Last name is required'),
-    phoneNumber: yup
-        .string()
-        .matches(/^\+?[1-9]\d{1,14}$/, 'Must be a valid phone number')
-        .required('Phone number is required'),
-    dateOfBirth: yup
-        .date()
-        .max(new Date(), 'Date of birth must be in the past')
-        .required('Date of birth is required'),
+    phoneNumber: yup.string().matches(/^\+?[1-9]\d{1,14}$/, 'Must be a valid phone number').required('Phone number is required'),
+    dateOfBirth: yup.date().max(new Date(), 'Date of birth must be in the past').required('Date of birth is required'),
 });
 
 const RegisterScreen = () => {
-    const {
-        control,
-        handleSubmit,
-        formState: { errors },
-        setValue,
-    } = useForm({
-        resolver: yupResolver(schema),
-        defaultValues: {
+    // Setup React Hook Form for input management with validation
+    const { control, handleSubmit, formState: { errors }, setValue } = useForm({
+        resolver: yupResolver(schema),  // Attach Yup validation schema
+        defaultValues: {  // Set default values for the form
             email: '',
             password: '',
             firstName: '',
@@ -56,44 +45,40 @@ const RegisterScreen = () => {
         },
     });
 
-    const [date, setDate] = useState(new Date('2000-12-12'));
-    const [show, setShow] = useState(false);
-    const [isLoading, setIsLoading] = useState(false);
-
+    const [date, setDate] = useState(new Date('2000-12-12'));  // Manage date picker state
+    const [show, setShow] = useState(false);  // Control visibility of date picker
+    const [isLoading, setIsLoading] = useState(false);  // Manage loading state
     const dispatch = useAppDispatch();
 
+    // Handle date change for date picker
     const onChangeDatePicker = (event: any, selectedDate?: Date) => {
         const currentDate = selectedDate || date;
         setShow(Platform.OS === 'ios');
         setDate(currentDate);
-        setValue('dateOfBirth', currentDate, { shouldValidate: true }); // Update form state
+        setValue('dateOfBirth', currentDate, { shouldValidate: true });  // Update form field with selected date
     };
 
+    // Handle form submission and registration logic
     const onSubmit = async (data: any) => {
-        setIsLoading(true);
+        setIsLoading(true);  // Show loading indicator while waiting for API response
         let { email, password, lastName, firstName, phoneNumber, dateOfBirth } = data;
-        dateOfBirth = moment(dateOfBirth).format('YYYY-MM-DD');
-        try {
-            const response = await register(
-                {
-                    email,
-                    lastName,
-                    firstName,
-                    phoneNumber,
-                    dateOfBirth,
-                },
-                password
-            );
+        dateOfBirth = moment(dateOfBirth).format('YYYY-MM-DD');  // Format date of birth before sending
 
+        try {
+            const response = await register({ email, lastName, firstName, phoneNumber, dateOfBirth }, password);
             if (response.status) {
+                // If registration is successful, automatically log in the user
                 const loginRes = await loginLocal(email, password);
                 if (loginRes.status) {
-                    dispatch(userLogin(loginRes.data));
-                    router.push('auth');
+                    dispatch(userLogin(loginRes.data));  // Update Redux store with user data
+                    router.push('auth');  // Redirect to authenticated area
                 }
             }
+            else {
+                Alert.alert('Register Failed', 'Email or phone number already existed. Please try again.');
+            }
         } catch (error: any) {
-            Alert.alert('Registration Failed', error.message);
+            Alert.alert('Registration Failed', error.message);  // Show error message on failure
         }
         setIsLoading(false);
     };

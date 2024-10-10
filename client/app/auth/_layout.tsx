@@ -5,11 +5,41 @@ import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { Colors } from '@/constants/Colors';
 import { useAppDispatch, useAppSelector } from '@/store/hooks';
 import { RootState } from '@/store/store';
+import { updateOrganization } from '@/store/slices/organizationSlice';
+import { connectSockets, disconnectSockets } from '@/socket/socket';
+
 
 export default function TabLayout() {
 
     const user = useAppSelector((state: RootState) => state.user);
     const dispatch = useAppDispatch();
+
+
+    useEffect(() => {
+        connectSockets();
+
+        return () => {
+            disconnectSockets();
+        };
+    }, [])
+
+    // useEffect(() => {
+
+    //     api.get('/api/user/protected?number=123987')
+    //         .then((res) => {
+    //             console.log('INDEX API get -----', res.data);
+    //         })
+    //         .catch(err => {
+    //             console.log('INDEX API err----', err);
+    //             // if (err.unauthorized) {
+    //             //     alert('LOGOUT');
+    //             //     router.replace('');
+    //             //     logout();
+    //             //     dispatch(userLogout());
+    //             // }
+    //         });
+
+    // }, []);
 
     return (
         <Tabs
