@@ -66,7 +66,7 @@ const NewChatScreen = () => {
             let group = await getGroupWith2ParticipantsApi(user.profile.email, selectedParticipants[0].email);
             if (group) {
                 router.navigate({
-                    pathname: 'auth/chat/ChatListScreen',
+                    pathname: '/auth/chat/ChatListScreen',
                     params: {
                         groupId: group.id,
                         groupName: '',
@@ -102,7 +102,7 @@ const NewChatScreen = () => {
             return;
 
         router.navigate({
-            pathname: 'auth/chat/ChatListScreen',
+            pathname: '/auth/chat/ChatListScreen',
             params: {
                 groupId: group.id,
                 groupName: group.name,
