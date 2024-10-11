@@ -37,7 +37,7 @@ const Login = () => {
                     name: 'Organization One',
                     address: '123 Main St'
                 }));
-                router.push('auth');  // Navigate to authenticated screen
+                router.push('/auth');  // Navigate to authenticated screen
             } else {
                 // If response status is false, show error message
                 Alert.alert('Login Failed', 'Invalid email or password. Please try again.');
@@ -89,7 +89,7 @@ const Login = () => {
                 {/* Navigation to Register screen */}
                 <View style={styles.registerContainer}>
                     <Text style={styles.registerText}>Don't have an account?</Text>
-                    <TouchableOpacity onPress={() => router.replace('unauth/register')}>
+                    <TouchableOpacity onPress={() => router.replace('/unauth/register')}>
                         <Text style={styles.registerButtonText}> Register</Text>
                     </TouchableOpacity>
                 </View>
