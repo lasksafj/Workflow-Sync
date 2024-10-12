@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { StyleSheet, View, Text, Modal, TouchableOpacity } from "react-native";
+import { StyleSheet, View, Text, Modal, TouchableOpacity, TextInput } from "react-native";
 import { useAppSelector } from "@/store/hooks";
 import { RootState } from "@/store/store";
 import { Feather as FeatherIcon } from "@expo/vector-icons";
@@ -22,6 +22,8 @@ const EmployeeList = ({
         (state: RootState) => state.organization
     );
     const [employees, setEmployees] = React.useState<any[]>([]);
+    const [filteredEmployees, setFilteredEmployees] = React.useState<any[]>([]);
+    const [searchQuery, setSearchQuery] = React.useState<string>("");
 
     useEffect(() => {
         let org = organization.abbreviation;
@@ -38,11 +40,24 @@ const EmployeeList = ({
                 }));
 
                 setEmployees(data);
+                setFilteredEmployees(data);
             })
             .catch((error) => {
                 alert(error);
             });
     }, [organization]);
+
+    // Update filtered employees based on search query
+    useEffect(() => {
+        if (searchQuery === "") {
+            setFilteredEmployees(employees); // Show all if search query is empty
+        } else {
+            const filtered = employees.filter((employee) =>
+                employee.value.toLowerCase().includes(searchQuery.toLowerCase())
+            );
+            setFilteredEmployees(filtered);
+        }
+    }, [searchQuery, employees]);
 
     const Header = () => (
         <View style={styles.header}>
@@ -63,6 +78,23 @@ const EmployeeList = ({
         </View>
     );
 
+    const handleSearch = (text: string) => {
+        setSearchQuery(text); // Update searchQuery state correctly
+    };
+
+    const SearchBar = () => (
+        <TextInput
+            placeholder="Search Employees"
+            clearButtonMode="always"
+            style={styles.searchBar}
+            value={searchQuery}
+            onChangeText={handleSearch}
+            autoFocus={true}
+        />
+    );
+
+
+
     return (
         <Modal
             animationType="slide"
@@ -74,8 +106,9 @@ const EmployeeList = ({
         >
             <SafeAreaView style={{ flex: 1 }}>
                 <Header />
+                <SearchBar />
                 <AlphabetList
-                    data={employees}
+                    data={filteredEmployees}
                     stickySectionHeadersEnabled
                     indexLetterStyle={{
                         color: Colors.primary,
@@ -128,6 +161,12 @@ const styles = StyleSheet.create({
         borderBottomColor: '#ccc',
         paddingVertical: 10,
         paddingHorizontal: 15,
+    },
+    searchBar: {
+        paddingHorizontal: 20,
+        paddingVertical: 10,
+        borderColor: "#ccc",
+        borderWidth: 1,
     },
     title: {
         fontSize: 20,

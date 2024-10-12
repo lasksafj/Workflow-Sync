@@ -18,10 +18,11 @@ exports.profileGetRole = async (req, res) => {
 exports.profileGetOrg = async (req, res) => {
     try {
         const data = await db.query(
-            `select e.id as id, o.abbreviation as abbreviation, o.name as name, o.address as address
+            `select max(e.id) as id, o.abbreviation as abbreviation, o.name as name, o.address as address
             from employees e
-            join organizations o ON e.org_abbreviation = o.abbreviation
-            where e.user_id=$1;`,
+            inner join organizations o ON e.org_abbreviation = o.abbreviation
+            where e.user_id=$1
+            group by o.abbreviation;`,
             [req.user.id]
         );
         res.status(200).json(data.rows);
