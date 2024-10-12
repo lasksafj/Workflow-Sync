@@ -1,38 +1,12 @@
 import { Tabs } from 'expo-router';
-import React, { useEffect } from 'react';
-
+import React from 'react';
 import { TabBarIcon } from '@/components/navigation/TabBarIcon';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { Colors } from '@/constants/Colors';
-import api from '@/apis/api';
 import { useAppDispatch, useAppSelector } from '@/store/hooks';
 import { RootState } from '@/store/store';
-import { updateOrganization } from '@/store/slices/organizationSlice';
 
 export default function TabLayout() {
-
-    const user = useAppSelector((state: RootState) => state.user);
-    const dispatch = useAppDispatch();
-
-
-    // useEffect(() => {
-
-    //     api.get('/api/user/protected?number=123987')
-    //         .then((res) => {
-    //             console.log('INDEX API get -----', res.data);
-    //         })
-    //         .catch(err => {
-    //             console.log('INDEX API err----', err);
-    //             // if (err.unauthorized) {
-    //             //     alert('LOGOUT');
-    //             //     router.replace('');
-    //             //     logout();
-    //             //     dispatch(userLogout());
-    //             // }
-    //         });
-
-    // }, []);
-
     return (
         <Tabs
             screenOptions={{

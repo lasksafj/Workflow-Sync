@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import { SafeAreaView } from "react-native-safe-area-context";
 import { StyleSheet, View, TouchableOpacity, Alert } from "react-native";
 import * as ImagePicker from "expo-image-picker";
 import { useAppSelector } from "@/store/hooks";
@@ -12,7 +11,6 @@ const ImageProfile = () => {
     const [selectedImage, setSelectedImage] = useState<string | null>(
         user.profile.avatar || null
     );
-    // console.log("selectedImage2222222222", selectedImage);
 
     const pickImage = async () => {
         // Request permission to access the library
@@ -68,7 +66,7 @@ const ImageProfile = () => {
             { cancelable: true }
         );
     };
-    // console.log("selectedImage3333333333333", selectedImage);
+
     return (
         <View style={styles.container}>
             <View style={styles.profile}>

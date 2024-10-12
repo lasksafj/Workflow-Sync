@@ -9,5 +9,9 @@ router.get(
     profileController.profileGetRole
 );
 router.get("/profile-getOrg", authMiddleware, profileController.profileGetOrg);
-
+router.get("/profile-getAllUsers", authMiddleware, profileController.profileGetAllUsers);
+router.put("/profile-put", authMiddleware, profileController.profilePut);
+router.put("/profile-putChangePassword", authMiddleware, profileController.profilePutPassword);
 module.exports = router;
+
+
