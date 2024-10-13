@@ -85,6 +85,7 @@ const EmployeeList = ({
     const SearchBar = () => (
         <TextInput
             placeholder="Search Employees"
+            placeholderTextColor="#999"
             clearButtonMode="always"
             style={styles.searchBar}
             value={searchQuery}

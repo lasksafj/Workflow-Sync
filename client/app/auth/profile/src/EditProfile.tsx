@@ -99,16 +99,21 @@ const EditProfile = ({
             });
     };
 
+    // const onChangeDatePicker = (event: any, selectedDate?: Date) => {
+    //     const currentDate = selectedDate || date;
+    //     if (currentDate !== undefined) {
+    //         setShow(true);
+    //         setDate(currentDate);
+    //         setValue("dateOfBirth", currentDate, { shouldValidate: true }); // Update form state
+    //     } else {
+    //         setShow(false);
+    //     }
+    // };
     const onChangeDatePicker = (event: any, selectedDate?: Date) => {
         const currentDate = selectedDate || date;
-        if (currentDate !== undefined) {
-            setShow(true);
-            setDate(currentDate);
-            setValue("dateOfBirth", currentDate, { shouldValidate: true }); // Update form state
-        } else {
-            setShow(false);
-        }
-
+        setShow(Platform.OS === "ios");
+        setDate(currentDate);
+        setValue("dateOfBirth", currentDate, { shouldValidate: true }); // Update form state
     };
 
     return (
@@ -252,9 +257,9 @@ const EditProfile = ({
                                     control={control}
                                     name="dateOfBirth"
                                     render={({
-                                        field: { value, onChange },
+                                        field: { onChange, onBlur, value },
                                     }) => (
-                                        <View >
+                                        <View>
                                             <TouchableOpacity
                                                 onPress={() => setShow(true)}
                                             >
@@ -265,6 +270,18 @@ const EditProfile = ({
                                                         )
                                                         : "Select Date"}
                                                 </Text>
+                                                {show && (
+                                                    <DateTimePicker
+                                                        testID="dateTimePicker"
+                                                        value={date}
+                                                        mode="date"
+                                                        display="default"
+                                                        onChange={
+                                                            onChangeDatePicker
+                                                        }
+                                                        maximumDate={new Date()}
+                                                    />
+                                                )}
                                             </TouchableOpacity>
                                         </View>
                                     )}
@@ -276,23 +293,10 @@ const EditProfile = ({
                                 </Text>
                             )}
                         </View>
-                        {show && (
-                            <View style={styles.row}>
-                                <View style={styles.rowSpacer} />
-                                <DateTimePicker
-                                    testID="dateTimePicker"
-                                    value={date}
-                                    mode="date"
-                                    display="default"
-                                    onChange={(_, selectedDate) => onChangeDatePicker(selectedDate)}
-                                    maximumDate={new Date()}
-                                />
-                            </View>
-                        )}
                     </View>
                 </View>
             </SafeAreaView>
-        </Modal>
+        </Modal >
     );
 };
 
