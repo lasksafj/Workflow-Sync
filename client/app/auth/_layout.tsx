@@ -1,7 +1,7 @@
 import { Tabs } from 'expo-router';
 import React from 'react';
 import { TabBarIcon } from '@/components/navigation/TabBarIcon';
-import { MaterialCommunityIcons } from '@expo/vector-icons';
+import { MaterialCommunityIcons, MaterialIcons } from '@expo/vector-icons';
 import { Colors } from '@/constants/Colors';
 import { useAppDispatch, useAppSelector } from '@/store/hooks';
 import { RootState } from '@/store/store';
@@ -12,13 +12,23 @@ export default function TabLayout() {
             screenOptions={{
                 tabBarActiveTintColor: Colors['light'].tint,
                 headerShown: false,
-            }}>
+            }}
+        >
             <Tabs.Screen
                 name="dashboard"
                 options={{
                     title: 'Dashboard',
                     tabBarIcon: ({ color, focused }) => (
                         <TabBarIcon name={focused ? 'home' : 'home-outline'} color={color} />
+                    ),
+                }}
+            />
+            <Tabs.Screen
+                name="planner"
+                options={{
+                    title: "Planner",
+                    tabBarIcon: ({ color, size }) => (
+                        <MaterialIcons name="schedule" color={color} size={size} />
                     ),
                 }}
             />

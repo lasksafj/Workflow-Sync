@@ -19,6 +19,7 @@
     "@hookform/resolvers": "^3.6.0",
     "@react-native-async-storage/async-storage": "1.23.1",
     "@react-native-community/datetimepicker": "^8.1.0",
+    "@react-navigation/material-top-tabs": "^6.6.14",
     "@react-navigation/native": "^6.0.2",
     "@reduxjs/toolkit": "^2.2.5",
     "@shopify/flash-list": "^1.7.0",
@@ -55,7 +56,8 @@
     "redux": "^5.0.1",
     "socket.io-client": "^4.7.5",
     "typescript": "~5.3.3",
-    "yup": "^1.4.0"
+    "yup": "^1.4.0",
+    "react-native-pager-view": "6.3.0"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",
