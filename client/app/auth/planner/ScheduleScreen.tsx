@@ -9,7 +9,6 @@ const ScheduleScreen = () => {
                 <Text>Schedule</Text>
             </View>
         </SafeAreaView>
-
     );
 };
 

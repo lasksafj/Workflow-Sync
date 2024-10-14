@@ -9,11 +9,13 @@ import { AlphabetList } from "react-native-section-alphabet-list";
 import { Colors } from "@/constants/Colors";
 import { Avatar } from "@/components/Avatar";
 
+// Define the props for EmployeeList component
 type EmployeeProps = {
     employeeListVisible: boolean;
     setEmployeeListVisible: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
+// EmployeeList component to display a list of employees
 const EmployeeList = ({
     employeeListVisible,
     setEmployeeListVisible,
@@ -21,14 +23,16 @@ const EmployeeList = ({
     const organization = useAppSelector(
         (state: RootState) => state.organization
     );
+
+    // State variables to store employees, filtered employees, and the search query
     const [employees, setEmployees] = React.useState<any[]>([]);
     const [filteredEmployees, setFilteredEmployees] = React.useState<any[]>([]);
     const [searchQuery, setSearchQuery] = React.useState<string>("");
 
+    // Fetch all employees for the selected organization
     useEffect(() => {
         let org = organization.abbreviation;
 
-        // dung get.then.catch la thay the cho async await
         api.get("/api/profile/profile-getAllUsers?org=" + org)
             .then((response) => {
                 const res = response.data;
@@ -59,6 +63,7 @@ const EmployeeList = ({
         }
     }, [searchQuery, employees]);
 
+    // Header component with a back button and title
     const Header = () => (
         <View style={styles.header}>
             <TouchableOpacity
@@ -78,10 +83,12 @@ const EmployeeList = ({
         </View>
     );
 
+    // Function to handle search input changes
     const handleSearch = (text: string) => {
         setSearchQuery(text); // Update searchQuery state correctly
     };
 
+    // SearchBar component
     const SearchBar = () => (
         <TextInput
             placeholder="Search Employees"
@@ -106,8 +113,8 @@ const EmployeeList = ({
             }}
         >
             <SafeAreaView style={{ flex: 1 }}>
-                <Header />
-                <SearchBar />
+                <Header /> {/* Render header */}
+                <SearchBar /> {/* Render search bar */}
                 <AlphabetList
                     data={filteredEmployees}
                     stickySectionHeadersEnabled
@@ -119,6 +126,7 @@ const EmployeeList = ({
                         width: 24,
                         backgroundColor: Colors.background,
                     }}
+                    // Render each employee item with avatar and details
                     renderCustomItem={(item: any) => (
                         <View style={styles.listItemContainer}>
                             <Avatar img={item.avatar} name={item.value} size={30} />
@@ -137,6 +145,7 @@ const EmployeeList = ({
                             </View>
                         </View>
                     )}
+                    // Render section headers (alphabet letters)
                     renderCustomSectionHeader={(section) => (
                         <View style={styles.sectionHeaderContainer}>
                             <Text style={{ color: Colors.gray }}>
@@ -153,6 +162,7 @@ const EmployeeList = ({
 
 export default EmployeeList;
 
+//Style
 const styles = StyleSheet.create({
     header: {
         flexDirection: 'row',

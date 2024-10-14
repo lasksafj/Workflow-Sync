@@ -31,8 +31,10 @@ exports.profileGetOrg = async (req, res) => {
     }
 };
 
+// Handler to get all users
 exports.profileGetAllUsers = async (req, res) => {
     try {
+        // Query to retrieve user details
         const data = await db.query(
             `SELECT u.email, u.first_name, u.last_name, u.avatar
             FROM employees e
@@ -48,22 +50,26 @@ exports.profileGetAllUsers = async (req, res) => {
     }
 };
 
+// Handler to update a user's profile information
 exports.profilePut = async (req, res) => {
     try {
         let { firstName, lastName, email, phoneNumber, dateOfBirth } = req.body;
+        // Update the user's profile data
         const data = await db.query(
             `UPDATE users
              SET last_name=$1, first_name=$2, email=$3, phone_number=$4, date_of_birth=$5
              WHERE id=$6`,
             [lastName, firstName, email, phoneNumber, dateOfBirth, req.user.id]
         );
-        //lay nguoc du lieu tu db
+
+        // Fetch the updated data from the database to return it in the response
         const result = await db.query("SELECT * FROM users WHERE id = $1", [
             req.user.id,
         ]);
         const user = result.rows[0];
         if (!user) throw new Error("Invalid access token");
 
+        // Construct the profile object to return updated data
         const profile = {
             email: user.email,
             lastName: user.last_name,
@@ -77,22 +83,23 @@ exports.profilePut = async (req, res) => {
     }
 };
 
+// Handler to change a user's password
 exports.profilePutPassword = async (req, res) => {
     try {
         let { currentPassword, newPassword } = req.body;
 
-        //get current password from database
+        // Get current password from database
         const result = await db.query('SELECT * FROM users WHERE id = $1', [req.user.id]);
         const user = result.rows[0];
         if (!user) throw new Error('User not found');
 
         const isMatch = await bcrypt.compare(currentPassword, user.password);
-        //check current password and current password from database
+        // Check current password and current password from database
         if (isMatch) {
-            // create hash password from new password
+            // Create hash password from new password
             const hashedNewPassword = await bcrypt.hash(newPassword, 10);
 
-            //put new password to database
+            // Put new password to database
             const newPassword_ = await db.query(
                 `update users
                 set password = $1

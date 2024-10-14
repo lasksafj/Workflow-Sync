@@ -3,21 +3,26 @@ import { StyleSheet, View, Text, Modal, TouchableOpacity, Dimensions, Switch } f
 import { Feather as FeatherIcon } from "@expo/vector-icons";
 import { SafeAreaView } from "react-native";
 
+// Define the props for AlertPreference component
 type AlertProps = {
     alertVisible: boolean;
     setAlertVisible: React.Dispatch<React.SetStateAction<boolean>>;
 };
+
+// AlertPreference component to manage notification preferences
 const AlertPreference = ({
     alertVisible,
     setAlertVisible,
 }: AlertProps) => {
 
+    // State variables to manage preferences for different alerts
     const [timeoffPref, setTimeoffPref] = useState(true);
     const [swapdropPref, setSwapdropPref] = useState(true);
     const [schedulePref, setSchedulePref] = useState(true);
     const [announcementPref, setAnnouncementPref] = useState(true);
     const [chatPref, setChatPref] = useState(true);
 
+    // Header component for the modal
     const Header = () => (
         <View style={styles.header}>
             <TouchableOpacity
@@ -37,6 +42,7 @@ const AlertPreference = ({
         </View>
     );
 
+    // Function to save user preferences
     const savePreferences = async () => { };
 
     return (
@@ -49,9 +55,10 @@ const AlertPreference = ({
             }}
         >
             <SafeAreaView style={{ flex: 1 }}>
-                <Header />
+                <Header />{/* Render the header */}
                 <View style={styles.section}>
                     <View>
+                        {/* Time-Off Request Switch */}
                         <View style={styles.rowWraper}>
                             <View style={styles.row}>
                                 <Text style={styles.rowLabel}>Time-Off Request</Text>
@@ -65,6 +72,7 @@ const AlertPreference = ({
                                 />
                             </View>
                         </View>
+                        {/* Swap/Drop Request Switch */}
                         <View style={styles.rowWraper}>
                             <View style={styles.row}>
                                 <Text style={styles.rowLabel}>Swap/Drop Request</Text>
@@ -78,6 +86,7 @@ const AlertPreference = ({
                                 />
                             </View>
                         </View>
+                        {/* Schedule Update Switch */}
                         <View style={styles.rowWraper}>
                             <View style={styles.row}>
                                 <Text style={styles.rowLabel}>Schedule Update</Text>
@@ -91,6 +100,7 @@ const AlertPreference = ({
                                 />
                             </View>
                         </View>
+                        {/* Announcement */}
                         <View style={styles.rowWraper}>
                             <View style={styles.row}>
                                 <Text style={styles.rowLabel}>Announcement</Text>
@@ -104,6 +114,7 @@ const AlertPreference = ({
                                 />
                             </View>
                         </View>
+                        {/* Chat Alert */}
                         <View style={styles.rowWraper}>
                             <View style={styles.row}>
                                 <Text style={styles.rowLabel}>Chat</Text>
@@ -127,6 +138,7 @@ const AlertPreference = ({
 
 export default AlertPreference;
 
+//Style
 const styles = StyleSheet.create({
     safeArea: {
         flex: 1,

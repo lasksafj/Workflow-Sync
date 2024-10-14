@@ -8,11 +8,13 @@ import { SafeAreaView } from "react-native";
 import { Feather as FeatherIcon, Ionicons } from "@expo/vector-icons";
 import { router } from "expo-router";
 
+// Props type for the ChangePassword component
 type ChangePasswordProps = {
     changePasswordVisible: boolean;
     setChangePasswordVisible: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
+// Type for password fields
 type PasswordProp = {
     currentPassword: string;
     newPassword: string;
@@ -27,6 +29,7 @@ const schema = yup.object().shape({
         .oneOf([yup.ref("newPassword"), undefined], "Passwords must match"),
 });
 
+// Component to handle password change logic
 const ChangePassword = ({
     changePasswordVisible,
     setChangePasswordVisible,
@@ -46,6 +49,7 @@ const ChangePassword = ({
         },
     });
 
+    // Function to reset form values to default
     const handleReset = () => {
         reset({
             currentPassword: "",
@@ -54,7 +58,7 @@ const ChangePassword = ({
         });
     };
 
-    //Ask for password confirmation
+    // Function to submit new password to API
     const onSubmit = (data: PasswordProp) => {
         api.put("/api/profile/profile-putChangePassword", data)
             .then((res) => {
@@ -69,6 +73,7 @@ const ChangePassword = ({
             })
     };
 
+    // Header component for the modal
     const Header = () => (
         <View style={styles.header}>
             <TouchableOpacity
@@ -90,6 +95,7 @@ const ChangePassword = ({
         </View>
     );
 
+    // State to toggle password visibility
     const [showPassword, setShowPassword] = useState(false);
     const passwordVisibility = () => {
         setShowPassword(!showPassword);
@@ -105,10 +111,11 @@ const ChangePassword = ({
             }}
         >
             <SafeAreaView style={{ flex: 1 }}>
-                <Header />
+                <Header /> {/* Render the header component */}
 
                 <View style={styles.section}>
                     <View>
+                        {/* Current Password Input */}
                         <View style={styles.rowWraper}>
                             <View style={styles.row}>
                                 <Text style={styles.rowLabel}>Current password</Text>
@@ -147,6 +154,7 @@ const ChangePassword = ({
                                 </Text>
                             )}
                         </View>
+                        {/* New Password Input */}
                         <View style={styles.rowWraper}>
                             <View style={styles.row}>
                                 <Text style={styles.rowLabel}>New password</Text>
@@ -180,6 +188,7 @@ const ChangePassword = ({
                                 </Text>
                             )}
                         </View>
+                        {/* Confirm Password Input */}
                         <View style={styles.rowWraper}>
                             <View style={styles.row}>
                                 <Controller
@@ -207,6 +216,7 @@ const ChangePassword = ({
                             )}
                         </View>
                         <View style={styles.rowWraper} />
+                        {/* Submit button to update the password */}
                         <Button
                             title="Update"
                             onPress={handleSubmit(onSubmit)}
@@ -220,6 +230,7 @@ const ChangePassword = ({
 
 export default ChangePassword;
 
+// Style
 const styles = StyleSheet.create({
     safeArea: {
         flex: 1,

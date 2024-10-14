@@ -204,11 +204,11 @@ const ProfileScreen = () => {
         >
             <TouchableOpacity
                 onPress={() => {
-                    if (id === "logout") {
-                        setLogOutVisible(true);
-                    }
                     if (id === "switchworkplace") {
                         setSwitchWorkplaceVisible(true);
+                    }
+                    if (id === "logout") {
+                        setLogOutVisible(true);
                     }
                     if (id === "employeelist") {
                         setEmployeeListVisible(true);

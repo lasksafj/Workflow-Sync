@@ -11,11 +11,13 @@ import DateTimePicker from "@react-native-community/datetimepicker";
 import moment from "moment";
 import { SafeAreaView } from "react-native";
 
+// Props type definition for the EditProfile component
 type EditProps = {
     editProfileVisible: boolean;
     setEditProfileVisible: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
+// Interface for form values
 interface FormValues {
     firstName: string;
     lastName: string;
@@ -54,9 +56,11 @@ const EditProfile = ({
     const user = useAppSelector((state: RootState) => state.user);
     const dispatch = useAppDispatch();
 
+    // Local state
     const [date, setDate] = useState(new Date());
     const [show, setShow] = useState(false);
 
+    // react-hook-form setup with yup validation resolver
     const {
         control,
         handleSubmit,
@@ -74,6 +78,7 @@ const EditProfile = ({
         },
     });
 
+    // Function to reset form values to default
     const handleReset = () => {
         reset({
             firstName: user.profile.firstName,
@@ -84,6 +89,7 @@ const EditProfile = ({
         });
     };
 
+    // Function to handle form submission
     const onSubmit = (data: FormValues) => {
         api.put("/api/profile/profile-put", data)
             .then((res) => {
@@ -99,16 +105,7 @@ const EditProfile = ({
             });
     };
 
-    // const onChangeDatePicker = (event: any, selectedDate?: Date) => {
-    //     const currentDate = selectedDate || date;
-    //     if (currentDate !== undefined) {
-    //         setShow(true);
-    //         setDate(currentDate);
-    //         setValue("dateOfBirth", currentDate, { shouldValidate: true }); // Update form state
-    //     } else {
-    //         setShow(false);
-    //     }
-    // };
+    // Function to handle date change in DateTimePicker
     const onChangeDatePicker = (event: any, selectedDate?: Date) => {
         const currentDate = selectedDate || date;
         setShow(Platform.OS === "ios");
@@ -143,6 +140,7 @@ const EditProfile = ({
 
                 <View style={styles.section}>
                     <View>
+                        {/* First Name Input */}
                         <View style={styles.rowWraper}>
                             <View style={styles.row}>
                                 <Text style={styles.rowLabel}>First Name</Text>
@@ -171,6 +169,7 @@ const EditProfile = ({
                         </View>
                         <View style={styles.rowWraper}>
                             <View style={styles.row}>
+                                {/* Last Name Input */}
                                 <Text style={styles.rowLabel}>Last Name</Text>
                                 <View style={styles.rowSpacer} />
                                 <Controller
@@ -197,6 +196,7 @@ const EditProfile = ({
                         </View>
                         <View style={styles.rowWraper}>
                             <View style={styles.row}>
+                                {/* Email Input */}
                                 <Text style={styles.rowLabel}>Email</Text>
                                 <View style={styles.rowSpacer} />
                                 <Controller
@@ -223,6 +223,7 @@ const EditProfile = ({
                         </View>
                         <View style={styles.rowWraper}>
                             <View style={styles.row}>
+                                {/* Phone Number Input */}
                                 <Text style={styles.rowLabel}>Phone</Text>
                                 <View style={styles.rowSpacer} />
                                 <Controller
@@ -249,6 +250,7 @@ const EditProfile = ({
                         </View>
                         <View style={styles.rowWraper}>
                             <View style={styles.row}>
+                                {/* Date of Birth Input */}
                                 <Text style={styles.rowLabel}>
                                     Date Of Birth
                                 </Text>
@@ -302,6 +304,7 @@ const EditProfile = ({
 
 export default EditProfile;
 
+// Style
 const styles = StyleSheet.create({
     safeArea: {
         flex: 1,
