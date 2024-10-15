@@ -42,6 +42,7 @@
     "react-dom": "18.2.0",
     "react-hook-form": "^7.51.5",
     "react-native": "0.74.1",
+    "react-native-calendars": "^1.1307.0",
     "react-native-gesture-handler": "~2.16.1",
     "react-native-gifted-chat": "^2.4.0",
     "react-native-pager-view": "6.3.0",

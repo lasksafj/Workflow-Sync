@@ -1,15 +1,91 @@
-import React from "react";
-import { View, Text } from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
+import React, { useState, useMemo, useEffect, useRef, useCallback } from 'react';
+import { View, Text, ScrollView, StyleSheet } from 'react-native';
+import WeekDays from './components/WeekDays';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import ScheduleDetail from './components/ScheduleDetail';
+import moment from 'moment';
+import { useFocusEffect } from 'expo-router';
+import { Ionicons } from '@expo/vector-icons'
 
-const ScheduleScreen = () => {
+
+const ScheduleScreen: React.FC = () => {
+    const [date, setDate] = useState(moment().format('YYYY-MM-DD'));
+    const [expandedDate, setExpandedDate] = useState<string | null>(null);
+    const scrollViewRef = useRef<ScrollView>(null);
+    const itemRefs = useRef<{ [key: string]: View | null }>({});
+
+    const [trigger, setTrigger] = useState(0)
+    // useFocusEffect(
+    //     useCallback(
+    //         () => {
+    //             // setExpandedDate(prev=>prev);
+    //             setTrigger(prev => prev + 1)
+    //         }
+    //         , [])
+    // )
+    const daysOfWeek = useMemo(
+        () =>
+            Array.from({ length: 7 }, (v, i) =>
+                moment(date).startOf('week').add(i, 'days').format('YYYY-MM-DD')
+            ),
+        [date]
+    );
+
+    const [week, setWeek] = useState<string[]>(daysOfWeek);
+
+    // useEffect(() => {
+    //     setWeek(daysOfWeek);
+    // }, [date]);
+
+    // useEffect(() => {
+    //     // Scroll to the selected date and expand it
+    //     if (itemRefs.current[date]) {
+    //         itemRefs.current[date]?.measure((x, y, width, height, pageX, pageY) => {
+    //             scrollViewRef.current?.scrollTo({ y: pageY, animated: true });
+    //             setExpandedDate(date); // Expand the selected date
+    //         });
+    //     }
+    // }, [date, week]);
+
+    const handleBarPress = (item: string) => {
+        setExpandedDate((prev) => (prev === item ? null : item));
+        setDate(item); // Navigate to the date when the bar is pressed
+    };
+
     return (
-        <SafeAreaView>
-            <View>
-                <Text>Schedule</Text>
-            </View>
-        </SafeAreaView>
+        <View style={styles.container}>
+            <ScrollView ref={scrollViewRef}>
+                <View style={styles.calendar}>
+                    <WeekDays selectedDay={date} setSelectedDay={setDate} daysOfWeek={daysOfWeek} />
+                </View>
+                <View style={styles.tabs}>
+                    {week.map((item, index) => (
+                        <View
+                            key={index}
+                            ref={(ref) => { itemRefs.current[item] = ref; }}
+                        >
+                            <ScheduleDetail detail={item} isExpanded={expandedDate === item} onPress={() => handleBarPress(item)} />
+                        </View>
+                    ))}
+                </View>
+
+            </ScrollView>
+        </View>
     );
 };
+
+const styles = StyleSheet.create({
+    container: {
+        // display: 'flex',
+        // backgroundColor: '#E1D5C9',
+        flex: 1
+    },
+    calendar: {
+        backgroundColor: '#E1D5C9'
+    },
+    tabs: {
+        paddingHorizontal: 2
+    }
+})
 
 export default ScheduleScreen;

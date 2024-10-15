@@ -4,17 +4,16 @@ import AvailabilityScreen from './AvailabilityScreen';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { NavigationContainer } from '@react-navigation/native';
 import { Stack } from 'expo-router';
-import { View } from 'react-native';
+import { SafeAreaView, View, Text } from 'react-native';
 
 
 const Tab = createMaterialTopTabNavigator();
 
-export default function PlannerTabs() {
-    const insets = useSafeAreaInsets();
-
+function PlannerTabs() {
     return (
         <Tab.Navigator
             initialRouteName='Schedule'
+            screenOptions={{}}
         >
             <Tab.Screen
                 name='Schedule'
@@ -27,3 +26,32 @@ export default function PlannerTabs() {
         </Tab.Navigator>
     );
 }
+
+function PlannerScreen() {
+    return (
+        < SafeAreaView style={{ flex: 1 }}>
+            <PlannerTabs />
+        </SafeAreaView >
+    );
+}
+
+export default PlannerScreen;
+
+const styles = {
+    header: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        borderBottomWidth: 1,
+        borderBottomColor: '#ccc',
+        paddingVertical: 10,
+        paddingHorizontal: 15,
+    },
+    title: {
+        fontSize: 20,
+        fontWeight: '700',
+        color: '#333',
+        marginBottom: 6,
+        marginTop: 6,
+    },
+};
