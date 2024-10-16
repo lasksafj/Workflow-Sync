@@ -1,11 +1,9 @@
 import React, { useState, useMemo, useEffect, useRef, useCallback } from 'react';
 import { View, Text, ScrollView, StyleSheet } from 'react-native';
-import WeekDays from './components/WeekDays';
-import { SafeAreaView } from 'react-native-safe-area-context';
-import ScheduleDetail from './components/ScheduleDetail';
+import WeekDays from './schedule/WeekDays';
+import ScheduleDetail from './schedule/ScheduleDetail';
 import moment from 'moment';
 import { useFocusEffect } from 'expo-router';
-import { Ionicons } from '@expo/vector-icons'
 
 
 const ScheduleScreen: React.FC = () => {
@@ -15,14 +13,14 @@ const ScheduleScreen: React.FC = () => {
     const itemRefs = useRef<{ [key: string]: View | null }>({});
 
     const [trigger, setTrigger] = useState(0)
-    // useFocusEffect(
-    //     useCallback(
-    //         () => {
-    //             // setExpandedDate(prev=>prev);
-    //             setTrigger(prev => prev + 1)
-    //         }
-    //         , [])
-    // )
+    useFocusEffect(
+        useCallback(
+            () => {
+                // setExpandedDate(prev=>prev);
+                setTrigger(prev => prev + 1)
+            }
+            , [])
+    )
     const daysOfWeek = useMemo(
         () =>
             Array.from({ length: 7 }, (v, i) =>
@@ -33,19 +31,19 @@ const ScheduleScreen: React.FC = () => {
 
     const [week, setWeek] = useState<string[]>(daysOfWeek);
 
-    // useEffect(() => {
-    //     setWeek(daysOfWeek);
-    // }, [date]);
+    useEffect(() => {
+        setWeek(daysOfWeek);
+    }, [date]);
 
-    // useEffect(() => {
-    //     // Scroll to the selected date and expand it
-    //     if (itemRefs.current[date]) {
-    //         itemRefs.current[date]?.measure((x, y, width, height, pageX, pageY) => {
-    //             scrollViewRef.current?.scrollTo({ y: pageY, animated: true });
-    //             setExpandedDate(date); // Expand the selected date
-    //         });
-    //     }
-    // }, [date, week]);
+    useEffect(() => {
+        // Scroll to the selected date and expand it
+        if (itemRefs.current[date]) {
+            itemRefs.current[date]?.measure((x, y, width, height, pageX, pageY) => {
+                scrollViewRef.current?.scrollTo({ y: pageY, animated: true });
+                setExpandedDate(date); // Expand the selected date
+            });
+        }
+    }, [date, week]);
 
     const handleBarPress = (item: string) => {
         setExpandedDate((prev) => (prev === item ? null : item));
@@ -76,8 +74,6 @@ const ScheduleScreen: React.FC = () => {
 
 const styles = StyleSheet.create({
     container: {
-        // display: 'flex',
-        // backgroundColor: '#E1D5C9',
         flex: 1
     },
     calendar: {

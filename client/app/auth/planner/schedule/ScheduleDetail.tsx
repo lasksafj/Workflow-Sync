@@ -3,6 +3,9 @@ import { View, Text, TouchableOpacity, StyleSheet, Animated } from 'react-native
 // import { handleFetchScheduleData } from '@/apis/userService';
 import ScheduleCard from './ScheduleCard';
 import { Ionicons } from '@expo/vector-icons'
+import { useAppSelector } from '@/store/hooks';
+import { RootState } from '@/store/store';
+import api from '@/apis/api';
 
 interface ScheduleDetailProps {
     detail: string;
@@ -15,28 +18,49 @@ const ScheduleDetail: React.FC<ScheduleDetailProps> = ({ detail, isExpanded, onP
     const [height] = useState(new Animated.Value(isExpanded ? (listData.length ? listData.length * 100 : 50) : 0));
     // const [dataFetched, setDataFetched] = useState(false);
 
-    // useEffect(() => {
-    //     const fetchData = async () => {
-    //         let data = await handleFetchScheduleData(detail);
-    //         setListData(prev => data.data.ED);
-    //         // setDataFetched(true);
-    //         Animated.timing(height, {
-    //             toValue: data.data.ED.length ? data.data.ED.length * 100 : 50,
-    //             duration: 300,
-    //             useNativeDriver: false,
-    //         }).start();
-    //     };
+    const organization = useAppSelector(
+        (state: RootState) => state.organization
+    );
 
-    //     if (isExpanded) {
-    //         fetchData();
-    //     } else {
-    //         Animated.timing(height, {
-    //             toValue: isExpanded ? (listData.length ? listData.length * 100 : 50) : 0,
-    //             duration: 300,
-    //             useNativeDriver: false,
-    //         }).start();
-    //     }
-    // }, [isExpanded, listData.length]);
+    useEffect(() => {
+        let org = organization.abbreviation;
+
+        api.get("/api/schedule/schedule-get?org=" + org)
+            .then((res) => {
+                const data = res.data;
+                setListData(prev => data);
+                Animated.timing(height, {
+                    toValue: data.length ? data.length * 100 : 50,
+                    duration: 300,
+                    useNativeDriver: false,
+                }).start();
+            })
+            .catch((error) => {
+                alert(error);
+            });
+
+        if (isExpanded) {
+            api.get("/api/schedule/schedule-get?org=" + org)
+                .then((res) => {
+                    const data = res.data;
+                    setListData(prev => data);
+                    Animated.timing(height, {
+                        toValue: data.length ? data.length * 100 : 50,
+                        duration: 300,
+                        useNativeDriver: false,
+                    }).start();
+                })
+                .catch((error) => {
+                    alert(error);
+                });
+        } else {
+            Animated.timing(height, {
+                toValue: isExpanded ? (listData.length ? listData.length * 100 : 50) : 0,
+                duration: 300,
+                useNativeDriver: false,
+            }).start();
+        }
+    }, [isExpanded, listData.length]);
 
     const dateConvert = (date: string | Date): string => {
         const objDate = new Date(date);

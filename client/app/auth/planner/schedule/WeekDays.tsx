@@ -1,34 +1,14 @@
-
 import React, { useState, useCallback, useMemo, memo, useRef, useEffect } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, Animated, ScrollView, Easing, PanResponder, Dimensions } from 'react-native';
 import { Calendar, DateData } from 'react-native-calendars';
 import moment from 'moment';
 import { Ionicons } from '@expo/vector-icons'
 import Constants from 'expo-constants';
-// type weekDatePropType = {
-//     changeDate: Function 
-// }
 
 const itemWidth = Dimensions.get('window').width / 9;
 const WeekDays = (props: any) => {
-    // const [selectedDay, setSelectedDay] = useState(moment().format('YYYY-MM-DD'));
-    // const [isCalendarVisible, setIsCalendarVisible] = useState(false);
 
     const animationValue = useRef(new Animated.Value(0)).current;
-
-    // const daysOfWeek = useMemo(
-    //   () =>
-    //     Array.from({ length: 7 }, (v, i) =>
-    //       moment(selectedDay).startOf('week').add(i, 'days').format('YYYY-MM-DD')
-    //     ),
-    //   [selectedDay]
-    // );
-
-    // const [selectedWeek, setSelectedWeek] = useState(daysOfWeek)
-
-    // useEffect(() => {
-    //   props.changeDate(selectedDay, selectedWeek)
-    // }, [props, selectedDay, selectedWeek])
 
     const handleDayPress = useCallback((day: DateData) => {
         props.setSelectedDay(day.dateString);
@@ -76,12 +56,6 @@ const WeekDays = (props: any) => {
             <Animated.View style={{ overflow: 'hidden', height: calendarHeight }}>
                 <Calendar onDayPress={handleDayPress} selectedDay={props.selectedDay} />
             </Animated.View>
-            {/* 
-      <Header
-        daysOfWeek={props.daysOfWeek}
-        selectedDay={props.selectedDay}
-        onDayPress={handleSelectDay}
-      /> */}
             <View style={styles.weeks} {...panResponder.panHandlers}>
                 <Header
                     daysOfWeek={props.daysOfWeek}

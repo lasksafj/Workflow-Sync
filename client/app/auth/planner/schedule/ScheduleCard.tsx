@@ -27,9 +27,9 @@ const ScheduleCard = (props: any) => {
     const [userSchedule, setUserSchedule] = useState(props.detail)
     const start = new Date(userSchedule.start_time)
     const end = new Date(userSchedule.end_time)
-    // useEffect(() => {
-    //     setUserSchedule(props.detail)
-    // }, [props.detail])
+    useEffect(() => {
+        setUserSchedule(props.detail)
+    }, [props.detail])
     console.log('ScheduleCard: ', userSchedule)
     console.log('ScheduleCard: ', start, ' ', end)
     return (
