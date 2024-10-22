@@ -65,26 +65,7 @@ export default function TabLayout() {
                     ),
                 }}
             />
-            {/* Commented out Schedule tab */}
-            {/* <Tabs.Screen
-                name="schedule"
-                options={{
-                    title: 'Schedule',
-                    tabBarIcon: ({ color, focused }) => (
-                        <TabBarIcon name={focused ? 'calendar' : 'calendar-outline'} color={color} />
-                    ),
-                }}
-            /> */}
-            {/* New Schedule1 Tab */}
-            <Tabs.Screen
-                name="Schedule1"
-                options={{
-                    title: 'Schedule1', // Update the title to differentiate
-                    tabBarIcon: ({ color, focused }) => (
-                        <TabBarIcon name={focused ? 'calendar' : 'calendar-outline'} color={color} />
-                    ),
-                }}
-            />
+           
             <Tabs.Screen
                 name="notification"
                 options={{

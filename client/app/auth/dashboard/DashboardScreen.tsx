@@ -324,14 +324,39 @@ export default function DashboardScreen() {
 
 
                 {/* Logout Button */}
-                <Button
+                {/* <Button
                     title="Logout"
                     onPress={() => {
                         logout(); // Call logout API
                         dispatch(userLogout()); // Update Redux state
-                        router.replace(""); // Navigate back to the login screen
+                        router.replace("/unauth/login"); // Navigate back to the login screen
                     }}
-                />
+                /> */}
+                <View style={styles.buttonRow}>
+                    <TouchableOpacity
+                        style={styles.qrCodeButton}
+                        onPress={() => {
+                            router.push('/auth/dashboard/QRCode');
+                        }}
+                    >
+                        <View style={styles.buttonContent}>
+                            <Icon name="qrcode" size={20} color="white" />
+                            {/* <Text style={styles.buttonText}>QR Code Generator</Text> */}
+                        </View>
+                    </TouchableOpacity>
+
+                    <TouchableOpacity
+                        style={styles.clockInOutButton}
+                        onPress={() => {
+                            router.push('/auth/dashboard/TimeclockScreen');
+                        }}
+                    >
+                        <View style={styles.buttonContent}>
+                            <Icon name="clock-o" size={20} color="white" />
+                            {/* <Text style={styles.buttonText}>Clock In/Out</Text> */}
+                        </View>
+                    </TouchableOpacity>
+                </View>
             </ScrollView>
 
 
@@ -491,5 +516,55 @@ const styles = StyleSheet.create({
         color: "#fff",
         fontSize: 16,
         fontWeight: "bold",
+    },
+    buttonRow: {
+        flexDirection: 'row', // Align buttons horizontally
+        justifyContent: 'space-between', // Add space between the buttons
+        alignItems: 'center',
+        marginVertical: 20, // Margin to separate from other elements
+        width: '90%', // Adjust this width to fit the buttons within the screen
+        alignSelf: 'center', // Center the row on the screen
+    },
+    qrCodeButton: {
+        backgroundColor: '#00BFFF',
+        paddingVertical: 15,
+        paddingHorizontal: 20,
+        borderRadius: 30,
+        flexDirection: 'row',
+        justifyContent: 'center',
+        alignItems: 'center',
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 3 },
+        shadowOpacity: 0.5,
+        shadowRadius: 5,
+        elevation: 8,
+        marginRight: 10, // Add space between the two buttons
+        flex: 1, // Allow button to shrink and grow in size
+    },
+    clockInOutButton: {
+        backgroundColor: '#FF6347',
+        paddingVertical: 15,
+        paddingHorizontal: 20,
+        borderRadius: 30,
+        flexDirection: 'row',
+        justifyContent: 'center',
+        alignItems: 'center',
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 3 },
+        shadowOpacity: 0.5,
+        shadowRadius: 5,
+        elevation: 8,
+        marginLeft: 10, // Add space between the two buttons
+        flex: 1, // Allow button to shrink and grow in size
+    },
+    buttonText: {
+        color: 'white',
+        fontSize: 12,
+        fontWeight: 'bold',
+        marginLeft: 10,
+    },
+    buttonContent: {
+        flexDirection: 'row',
+        alignItems: 'center',
     },
 });

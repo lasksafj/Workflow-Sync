@@ -10,7 +10,7 @@ const userRoutes = require("./routes/userRoutes");
 const profileRoutes = require("./routes/profileRoutes");
 const notificationsRoutes = require("./routes/notificationsRoutes");
 const dashboardRoutes = require("./routes/dashboardRoutes");
-const scheduleRoutes = require("./routes/userSchedules");
+const timeclockRoutes = require('./routes/timeclockRoutes');
 const socketConfig = require('./config/socket');
 const authSocketMiddleware = require('./middlewares/authSocketMiddleware');
 const chatSocket = require('./socket/chatSocket');
@@ -28,9 +28,9 @@ app.use('/api/chat', chatRoutes);
 app.use('/api/notifications', notificationsRoutes);
 app.use("/api/profile", profileRoutes);
 app.use("api/dashboard", dashboardRoutes)
+app.use("/api/timeclock", timeclockRoutes);
 
 
-scheduleRoutes(app)
 
 const server = app.listen(PORT, "0.0.0.0", () => {
     console.log(`Server is running on port ${PORT}`);
