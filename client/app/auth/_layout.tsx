@@ -59,7 +59,7 @@ export default function TabLayout() {
             <Tabs.Screen
                 name="profile"
                 options={{
-                    title: "Profile",
+                    title: 'Profile',
                     tabBarIcon: ({ color, size }) => (
                         <MaterialCommunityIcons name="account" color={color} size={size} />
                     ),
@@ -72,6 +72,15 @@ export default function TabLayout() {
                     title: 'Notifications',
                     tabBarIcon: ({ color, size }) => (
                         <MaterialCommunityIcons name="bell" color={color} size={size} />
+                    ),
+                }}
+            />
+            <Tabs.Screen
+                name="payroll"
+                options={{
+                    title: 'Payroll',
+                    tabBarIcon: ({ color, size }) => (
+                        <MaterialCommunityIcons name="currency-usd" color={color} size={size} />
                     ),
                 }}
             />
