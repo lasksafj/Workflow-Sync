@@ -1,10 +1,16 @@
 const db = require("../config/db");
 const moment = require('moment');
 
+// Get the schedule data based on organization and date
 exports.scheduleGet = async (req, res) => {
     try {
+        // Get 'org' and 'date' from the request query
         const { org, date } = req.query;
+
+        // Format the date
         const formattedDate = moment(date).format('YYYY-MM-DD');
+
+        // Execute a SQL query
         const data = await db.query(
             `select u.id, u.first_name, u.last_name, e.id, s.start_time, s.end_time, o.name from employees as e
             inner join users as u on u.id = e.user_id

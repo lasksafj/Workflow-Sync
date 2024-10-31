@@ -1,46 +1,57 @@
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
 import ScheduleScreen from './ScheduleScreen';
 import AvailabilityScreen from './AvailabilityScreen';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { NavigationContainer } from '@react-navigation/native';
-import { Stack } from 'expo-router';
-import { SafeAreaView, View, Text } from 'react-native';
+import { SafeAreaView, View, Text, StyleSheet } from 'react-native';
 
-
+// Initialize the top tab navigator
 const Tab = createMaterialTopTabNavigator();
 
+// Component PlannerTab which switches betwwen Schedule and Availability
 function PlannerTabs() {
     return (
         <Tab.Navigator
             initialRouteName='Schedule'
-            screenOptions={{}}
+            screenOptions={{
+                tabBarLabelStyle: { fontSize: 14, fontWeight: '600' },
+                tabBarIndicatorStyle: { backgroundColor: '#00adf5', height: 4 },
+                tabBarStyle: { backgroundColor: '#f9f9f9' },
+            }}
         >
+            {/* Define Schedule tab*/}
             <Tab.Screen
                 name='Schedule'
                 component={ScheduleScreen}
+                options={{ tabBarLabel: 'Schedule' }}
             />
+            {/* Define Availability tab */}
             <Tab.Screen
                 name='Availability'
                 component={AvailabilityScreen}
+                options={{ tabBarLabel: 'Availability' }}
             />
         </Tab.Navigator>
     );
 }
 
+// Main Planner component
 function PlannerScreen() {
     return (
-        < SafeAreaView style={{ flex: 1 }}>
+        <SafeAreaView style={{ flex: 1, backgroundColor: '#fff' }}>
+            <View style={styles.header}>
+                <Text style={styles.title}>Planner</Text>
+            </View>
             <PlannerTabs />
-        </SafeAreaView >
+        </SafeAreaView>
     );
 }
 
 export default PlannerScreen;
 
-const styles = {
+// Style
+const styles = StyleSheet.create({
     header: {
         flexDirection: 'row',
-        justifyContent: 'space-between',
+        justifyContent: 'center',
         alignItems: 'center',
         borderBottomWidth: 1,
         borderBottomColor: '#ccc',
@@ -48,10 +59,8 @@ const styles = {
         paddingHorizontal: 15,
     },
     title: {
-        fontSize: 20,
+        fontSize: 16,
         fontWeight: '700',
         color: '#333',
-        marginBottom: 6,
-        marginTop: 6,
     },
-};
+});

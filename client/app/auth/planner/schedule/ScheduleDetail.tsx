@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, Animated } from 'react-native';
-// import { handleFetchScheduleData } from '@/apis/userService';
 import ScheduleCard from './ScheduleCard';
-import { Ionicons } from '@expo/vector-icons'
+import { Ionicons } from '@expo/vector-icons';
 import { useAppSelector } from '@/store/hooks';
 import { RootState } from '@/store/store';
 import api from '@/apis/api';
+import { FlatList } from 'react-native';
 
 interface ScheduleDetailProps {
     detail: string;
@@ -13,82 +13,79 @@ interface ScheduleDetailProps {
     onPress: () => void;
 }
 
+// Component to display schedule details
 const ScheduleDetail: React.FC<ScheduleDetailProps> = ({ detail, isExpanded, onPress }) => {
-    const [listData, setListData] = useState([]);
-    const [height] = useState(new Animated.Value(isExpanded ? (listData.length ? listData.length * 100 : 50) : 0));
-    // const [dataFetched, setDataFetched] = useState(false);
+    const [listData, setListData] = useState<any[]>([]);
+    const heightAnim = useState(new Animated.Value(0))[0];
+    const organization = useAppSelector((state: RootState) => state.organization);
 
-    const organization = useAppSelector(
-        (state: RootState) => state.organization
-    );
-
+    // Fetch data when component mounts
     useEffect(() => {
         let org = organization.abbreviation;
+        let date = detail;
 
-        api.get("/api/schedule/schedule-get?org=" + org)
-            .then((res) => {
+        const fetchData = async () => {
+            try {
+                const res = await api.get(`/api/schedule/schedule-get?org=${org}&&chosedate=${date}`);
                 const data = res.data;
-                setListData(prev => data);
-                Animated.timing(height, {
-                    toValue: data.length ? data.length * 100 : 50,
+                setListData(data);
+
+                Animated.timing(heightAnim, {
+                    toValue: isExpanded ? 1 : 0,
                     duration: 300,
                     useNativeDriver: false,
                 }).start();
-            })
-            .catch((error) => {
+            } catch (error) {
                 alert(error);
-            });
+            }
+        };
 
-        if (isExpanded) {
-            api.get("/api/schedule/schedule-get?org=" + org)
-                .then((res) => {
-                    const data = res.data;
-                    setListData(prev => data);
-                    Animated.timing(height, {
-                        toValue: data.length ? data.length * 100 : 50,
-                        duration: 300,
-                        useNativeDriver: false,
-                    }).start();
-                })
-                .catch((error) => {
-                    alert(error);
-                });
+        // Fetch data only if expanded and no data is loaded
+        if (isExpanded && !listData.length) {
+            fetchData();
         } else {
-            Animated.timing(height, {
-                toValue: isExpanded ? (listData.length ? listData.length * 100 : 50) : 0,
+            Animated.timing(heightAnim, {
+                toValue: isExpanded ? 1 : 0,
                 duration: 300,
                 useNativeDriver: false,
             }).start();
         }
     }, [isExpanded, listData.length]);
 
+    // Convert date to a readable format
     const dateConvert = (date: string | Date): string => {
         const objDate = new Date(date);
+        const utcDate = new Date(objDate.getUTCFullYear(), objDate.getUTCMonth(), objDate.getUTCDate());
         const options: Intl.DateTimeFormatOptions = {
             weekday: 'long',
             month: 'long',
             day: 'numeric'
         };
-        return objDate.toLocaleDateString('en-US', options);
+        return utcDate.toLocaleDateString('en-US', options);
     };
 
     return (
         <View style={styles.container}>
+
+            {/* Displays the date and expands/collapses the schedule details */}
             <TouchableOpacity onPress={onPress} style={styles.bar}>
                 <Text style={styles.barText}>{dateConvert(detail)}</Text>
-                {isExpanded ?
+                {isExpanded ? (
                     <Ionicons name='chevron-up' size={20} color={"white"} />
-                    :
+                ) : (
                     <Ionicons name='chevron-down' size={20} color={"white"} />
-                }
-
+                )}
             </TouchableOpacity>
-            <Animated.View style={[styles.details, { height }]}>
+
+            {/* Animated view for schedule details */}
+            <Animated.View style={[styles.details, { opacity: heightAnim }]}>
                 {isExpanded && (
-                    listData.length > 0 ? (
-                        listData.map((item, index) => (
-                            <ScheduleCard detail={item} key={index} />
-                        ))
+                    listData.length !== 0 ? (
+                        <FlatList
+                            data={listData}
+                            renderItem={({ item }) => <ScheduleCard detail={item} />}
+                            keyExtractor={(item, index) => index.toString()}
+                        />
                     ) : (
                         <View style={{ justifyContent: 'center', alignItems: 'flex-start', height: 50 }}>
                             <Text style={{ fontSize: 20, fontWeight: '300', paddingLeft: 8 }}>
@@ -102,30 +99,25 @@ const ScheduleDetail: React.FC<ScheduleDetailProps> = ({ detail, isExpanded, onP
     );
 };
 
+// Style
 const styles = StyleSheet.create({
     container: {
         margin: 3,
     },
     bar: {
-        backgroundColor: '#000000',
+        backgroundColor: '#008000',
         padding: 10,
         borderRadius: 5,
-        display: 'flex',
         flexDirection: 'row',
-        justifyContent: 'space-between'
+        justifyContent: 'space-between',
     },
     barText: {
         color: '#FFFFFF',
         fontSize: 16,
-
     },
     details: {
         overflow: 'hidden',
-        backgroundColor: '#E0E0E0',
         borderRadius: 5,
-    },
-    detailContent: {
-        padding: 10,
     },
 });
 

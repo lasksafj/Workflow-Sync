@@ -1,20 +1,21 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, Animated, Dimensions } from 'react-native';
-// import { handleFetchScheduleData } from '@/apis/userService';
+import Icon from 'react-native-vector-icons/MaterialIcons';
+import { Avatar } from '@/components/Avatar';
 
-import InitialNameAvatar from '@/components/InitialNameAvatar';
-
+// Get screen width
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
 
-const dateToTime = (date_time: any) => {
-    // let date = new Date(date_time);
+// Format Date object to time in HH:MM format
+const dateToTime = (date_time: Date) => {
     let hours = date_time.getHours().toString().padStart(2, '0');
     let minutes = date_time.getMinutes().toString().padStart(2, '0');
     return `${hours}:${minutes}`;
 }
 
+// Calculate working hours and minutes between two times
 const workingHours = (start: any, end: any) => {
-    let diff = (end - start) / 1000 / 60;  // difference in minutes
+    let diff = (end - start) / 1000 / 60;
     let hours = Math.floor(diff / 60);
     let minutes = diff % 60;
     let formattedHours = hours.toString().padStart(2, '0');
@@ -23,86 +24,129 @@ const workingHours = (start: any, end: any) => {
     return `${formattedHours} hr-${formattedMinutes} min`;
 }
 
+// ScheduleCard component to display a user's shift details
 const ScheduleCard = (props: any) => {
-    const [userSchedule, setUserSchedule] = useState(props.detail)
-    const start = new Date(userSchedule.start_time)
-    const end = new Date(userSchedule.end_time)
-    useEffect(() => {
-        setUserSchedule(props.detail)
-    }, [props.detail])
-    console.log('ScheduleCard: ', userSchedule)
-    console.log('ScheduleCard: ', start, ' ', end)
-    return (
-        <TouchableOpacity style={styles.container}>
-            <View style={styles.block}>
-                <View style={styles.first}>
-                    <InitialNameAvatar
-                        name={userSchedule.first_name + ' ' + userSchedule.last_name}
-                        size={50}
-                    />
+    const [userSchedule, setUserSchedule] = useState(props.detail);
+    const start = new Date(userSchedule.start_time);
+    const end = new Date(userSchedule.end_time);
+    const animatedValue = useRef(new Animated.Value(1)).current;
 
+    // Update userSchedule when detail changes
+    useEffect(() => {
+        setUserSchedule(props.detail);
+    }, [props.detail]);
+
+    // Animation handlers for pressing down
+    const handlePressIn = () => {
+        Animated.spring(animatedValue, {
+            toValue: 0.95,
+            useNativeDriver: true,
+        }).start();
+    };
+
+    const handlePressOut = () => {
+        Animated.spring(animatedValue, {
+            toValue: 1,
+            useNativeDriver: true,
+        }).start();
+    };
+
+    return (
+        <TouchableOpacity
+            onPressIn={handlePressIn}
+            onPressOut={handlePressOut}
+            style={styles.container}
+        >
+            <Animated.View style={[styles.block, { transform: [{ scale: animatedValue }] }]}>
+
+                {/* Avatar section */}
+                <View style={styles.first}>
+                    <Avatar img={userSchedule.avatar} name={userSchedule.first_name + ' ' + userSchedule.last_name} size={50} />
                 </View>
+
+                {/* Name and shift duration section */}
                 <View style={styles.second}>
-                    <Text style={{ fontSize: 22, fontWeight: '700', }}>
+                    <Text style={styles.secondTextPrimary}>
                         {userSchedule.first_name + ' ' + userSchedule.last_name}
                     </Text>
-                    <Text style={{ fontSize: 16, fontWeight: '400' }}>
+                    <Text style={styles.secondTextSecondary}>
                         {workingHours(start, end)}
                     </Text>
-                    <Text style={{ fontSize: 18, fontWeight: '400' }}>
-                        {userSchedule.name}
-                    </Text>
                 </View>
-                <View style={styles.third}>
-                    <Text style={{ fontSize: 20, fontWeight: '500' }}>
-                        {dateToTime(start)}
-                    </Text>
-                    <Text style={{ fontSize: 20, fontWeight: '500' }}>
-                        {dateToTime(end)}
-                    </Text>
-                </View>
-            </View>
-        </TouchableOpacity>
 
+                {/* Start and end time section */}
+                <View style={styles.third}>
+                    <View style={styles.timeRow}>
+                        <Icon name="access-time" size={20} color="#2C3E50" />
+                        <Text style={styles.timeText}>{dateToTime(start)}</Text>
+                    </View>
+                    <View style={styles.timeRow}>
+                        <Icon name="access-time" size={20} color="#2C3E50" />
+                        <Text style={styles.timeText}>{dateToTime(end)}</Text>
+                    </View>
+                </View>
+            </Animated.View>
+        </TouchableOpacity>
     );
 };
 
+// Style
 const styles = StyleSheet.create({
     container: {
-        // paddingVertical: 4,
         margin: 2,
-        paddingHorizontal: 6,
-        height: 100,
-        backgroundColor: '#AFC1D6',
-        borderRadius: 2,
-        justifyContent: 'center'
-
+        paddingHorizontal: 4,
+        height: 80,
+        backgroundColor: '#EAF0F6',
+        borderRadius: 8,
+        justifyContent: 'center',
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 1 },
+        shadowOpacity: 0.1,
+        shadowRadius: 3,
+        elevation: 2,
     },
     block: {
-        display: 'flex',
         flexDirection: 'row',
         justifyContent: 'flex-start',
-        height: '100%'
-
+        height: '80%',
     },
     first: {
         justifyContent: 'center',
         alignItems: 'center',
         width: '15%',
-
     },
     second: {
-        paddingLeft: 10,
+        paddingLeft: 6,
         textAlign: 'left',
         flexDirection: 'column',
         justifyContent: 'space-evenly',
         width: '65%',
     },
+    secondTextPrimary: {
+        fontSize: 16,
+        fontWeight: '500',
+        color: '#2C3E50',
+    },
+    secondTextSecondary: {
+        fontSize: 12,
+        fontWeight: '400',
+        color: '#7F8C8D',
+    },
     third: {
         flexDirection: 'column',
         justifyContent: 'space-evenly',
         alignItems: 'center',
-        width: '20%'
+        width: '20%',
+    },
+    timeRow: {
+        flexDirection: 'row',
+        alignItems: 'center',
+    },
+    timeText: {
+        fontSize: 14,
+        fontWeight: '400',
+        marginLeft: 4,
+        marginRight: 6,
     }
 });
 
