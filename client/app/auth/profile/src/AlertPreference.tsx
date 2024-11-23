@@ -1,7 +1,8 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { StyleSheet, View, Text, Modal, TouchableOpacity, Dimensions, Switch } from "react-native";
 import { Feather as FeatherIcon } from "@expo/vector-icons";
 import { SafeAreaView } from "react-native";
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 // Define the props for AlertPreference component
 type AlertProps = {
@@ -21,6 +22,27 @@ const AlertPreference = ({
     const [schedulePref, setSchedulePref] = useState(true);
     const [announcementPref, setAnnouncementPref] = useState(true);
     const [chatPref, setChatPref] = useState(true);
+
+    // Load notification preferences when the component mounts.
+    useEffect(() => {
+        const loadPreferences = async () => {
+            try {
+                const storedPreferences = await AsyncStorage.getItem('notificationPreferences');
+                if (storedPreferences) {
+                    const parsedPreferences = JSON.parse(storedPreferences);
+                    setTimeoffPref(parsedPreferences.timeoffPref);
+                    setSwapdropPref(parsedPreferences.swapdropPref);
+                    setSchedulePref(parsedPreferences.schedulePref);
+                    setAnnouncementPref(parsedPreferences.announcementPref);
+                    setChatPref(parsedPreferences.chatPref);
+                }
+            } catch (error) {
+                console.error('Failed to load preferences:', error);
+            }
+        };
+
+        loadPreferences();
+    }, []);
 
     // Header component for the modal
     const Header = () => (
@@ -43,7 +65,21 @@ const AlertPreference = ({
     );
 
     // Function to save user preferences
-    const savePreferences = async () => { };
+    const savePreferences = async () => {
+        const preferences = {
+            timeoffPref,
+            swapdropPref,
+            schedulePref,
+            announcementPref,
+            chatPref,
+        };
+        try {
+            await AsyncStorage.setItem('notificationPreferences', JSON.stringify(preferences));
+            console.log('Preferences saved!', preferences);
+        } catch (error) {
+            console.error('Failed to save preferences:', error);
+        }
+    };
 
     return (
         <Modal
